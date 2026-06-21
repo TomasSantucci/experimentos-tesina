@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 
-CAUSAL = True # Set to False to show fully postprocessed bundle adjustment results]
-BATCH_DIR = "../.."
+CAUSAL = False # Set to False to show fully postprocessed bundle adjustment results]
+BATCH_DIR = "../../data"
 
 UNK = -1234567890  # (?) Represents an unknown value, latest data doesnt have it
 NA = -1234567891  # (—)
@@ -116,9 +116,9 @@ def select_index(ds, completion, success, ate_avg, ate_std, rte_avg, rte_std):
     raise NotImplementedError(f"Could not select index for {ds}, a further tie breaker is needed")
 
 
-def get_basalt_results():
-    SYSTEMS = ["basalt"]
-    DETERMINISTIC_RUN = "basalt.det"
+def get_basalt_results(causal=True):
+    SYSTEMS = ["basalt" if causal else "basalt.full"]
+    DETERMINISTIC_RUN = f"{SYSTEMS[0]}.det"
 
     def select_run_basalt(storage, ds):
         assert ds in storage["completion"][DETERMINISTIC_RUN]
@@ -182,7 +182,7 @@ def get_snakeslam_results(causal=True):
     return select_runs(storage, selected_runs)
 
 
-basalt_results = get_basalt_results()
+basalt_results = get_basalt_results(CAUSAL)
 dmvio_results = get_dmvio_results()
 orbslam3_results = get_orbslam3_results(CAUSAL)
 okvis2_results = get_okvis2_results(CAUSAL)
@@ -230,8 +230,8 @@ if CAUSAL:
     SYSTEMS = ["Basalt", "OKVIS2", "ORB-SLAM3", "DM-VIO", "SnakeSLAM"]
     RESULTS = [basalt_results, okvis2_results, orbslam3_results, dmvio_results, snakeslam_results]
 else:
-    SYSTEMS = ["OKVIS2", "ORB-SLAM3", "SnakeSLAM"]
-    RESULTS = [okvis2_results, orbslam3_results, snakeslam_results]
+    SYSTEMS = ["Basalt", "OKVIS2", "ORB-SLAM3", "SnakeSLAM"]
+    RESULTS = [basalt_results, okvis2_results, orbslam3_results, snakeslam_results]
 
 assert len(DATASETS) == 64
 
