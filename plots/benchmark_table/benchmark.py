@@ -277,6 +277,11 @@ rte_median = np.nanmedian(rtes_for_medians, axis=1)
 completion_median = np.nanmedian(completions_for_medians, axis=1)
 success_median = np.nanmedian(successes_for_medians, axis=1)
 
+ate_mean = np.nanmean(ates_for_medians, axis=1)
+rte_mean = np.nanmean(rtes_for_medians, axis=1)
+completion_mean = np.nanmean(completions_for_medians, axis=1)
+success_mean = np.nanmean(successes_for_medians, axis=1)
+
 # Print median values
 for system, ate, rte, completion, success in zip(SYSTEMS, ate_median, rte_median, completion_median, success_median):
     print(f"{system=}, {ate=:.2f}, {rte=:.2f}, {completion=:.0f}, {success=:.0f}")
@@ -297,12 +302,12 @@ print(f"{rte_ltth=}")
 print(f"{comp_ltth=}")
 print(f"{succ_ltth=}")
 
-ATE_DIVERGE_FROM = 10 * M_SCALER  # 10m
+ATE_DIVERGE_FROM = 10 * M_SCALER * 1000  # 10m
 ates_sorted = sorted(ates.reshape((-1,)))
 ates_sorted = [x for x in ates_sorted if x <= ATE_DIVERGE_FROM]
 ate_p90 = ates_sorted[int(len(ates_sorted) * 0.9)]
 
-RTE_DIVERGE_FROM = 0.1 * M_SCALER  # 10cm
+RTE_DIVERGE_FROM = 0.1 * M_SCALER * 1000 # 10cm
 rtes_sorted = sorted(rtes.reshape((-1,)))
 rtes_sorted = [x for x in rtes_sorted if x <= RTE_DIVERGE_FROM]
 rte_p90 = rtes_sorted[int(len(rtes_sorted) * 0.9)]
@@ -337,6 +342,13 @@ rtes = np.hstack([rtes, rte_median.reshape(len(SYSTEMS), 1)])
 completions = np.hstack([completions, completion_median.reshape(len(SYSTEMS), 1)])
 successes = np.hstack([successes, success_median.reshape(len(SYSTEMS), 1)])
 DATASETS += ["Median"]
+
+# Add average row
+ates = np.hstack([ates, ate_mean.reshape(len(SYSTEMS), 1)])
+rtes = np.hstack([rtes, rte_mean.reshape(len(SYSTEMS), 1)])
+completions = np.hstack([completions, completion_mean.reshape(len(SYSTEMS), 1)])
+successes = np.hstack([successes, success_mean.reshape(len(SYSTEMS), 1)])
+DATASETS += ["Average"]
 
 # Add lower-than-threshold row
 # ates = np.hstack([ates, ate_ltth.reshape(len(SYSTEMS), 1)])
