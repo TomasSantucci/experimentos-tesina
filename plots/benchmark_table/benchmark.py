@@ -14,12 +14,15 @@ import json
 
 CAUSAL = False # Set to False to show fully postprocessed bundle adjustment results]
 BATCH_DIR = "../../data"
+DS_PREFIX = "MO"  # Set to a string (e.g. "MI") to only include datasets with that prefix
 
 UNK = -1234567890  # (?) Represents an unknown value, latest data doesnt have it
 NA = -1234567891  # (—)
 
 DATASETS = ["MIO01","MIO02","MIO03","MIO04","MIO05","MIO06","MIO07","MIO08","MIO09","MIO10","MIO11","MIO12","MIO13","MIO14","MIO15","MIO16","MIPB01","MIPB02","MIPB03","MIPB04","MIPB05","MIPB06","MIPB07","MIPB08","MIPP01","MIPP02","MIPP03","MIPP04","MIPP05","MIPP06","MIPT01","MIPT02","MIPT03","MGO01","MGO02","MGO03","MGO04","MGO05","MGO06","MGO07","MGO08","MGO09","MGO10","MGO11","MGO12","MGO13","MGO14","MGO15","MOO01","MOO02","MOO03","MOO04","MOO05","MOO06","MOO07","MOO08","MOO09","MOO10","MOO11","MOO12","MOO13","MOO14","MOO15","MOO16"]  # fmt: skip
 assert len(set(DATASETS)) == 64
+if DS_PREFIX:
+    DATASETS = [ds for ds in DATASETS if ds.startswith(DS_PREFIX)]
 
 
 def load_storage(systems):
@@ -232,8 +235,6 @@ if CAUSAL:
 else:
     SYSTEMS = ["Basalt", "OKVIS2", "ORB-SLAM3", "SnakeSLAM"]
     RESULTS = [basalt_results, okvis2_results, orbslam3_results, snakeslam_results]
-
-assert len(DATASETS) == 64
 
 # Sample data as before
 ates = np.ones((len(SYSTEMS), len(DATASETS))) * -1
