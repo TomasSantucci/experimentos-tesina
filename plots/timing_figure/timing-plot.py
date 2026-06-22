@@ -1,38 +1,40 @@
 # NOTE: The timing numbers coming from this directory come from running on a
-# Intel Core Ultra 7 258V (Asus Zenbook S24 laptop), they are not to be found
-# in the timing results from the root directory. Read the README.md file in that
-# directory for more information about timing info.
+# Intel Core Ultra 9 285H (Thinkpad P16S laptop)
 
-import numpy as np
-
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
+import argparse
 from itertools import cycle
+from pathlib import Path
 from statistics import median
 
-rcParams["font.family"] = "CMU Serif"
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import rcParams
+
 rcParams["font.family"] = "CMU Serif"
 # Use type3 fonts to pass the ieee ras papercept pdf check
 # see: http://phyletica.org/matplotlib-fonts/
 rcParams["pdf.fonttype"] = 42
 rcParams["ps.fonttype"] = 42
 
-DATASET_FRAME_COUNT = 5404  # MOO02
-DATASET_FIRST_TS = 7669821982615  # MOO02
-DPI = 150
-IMG_WIDTH = 1024
-IMG_HEIGHT = 640
-MAXY = 110
-MAXX = DATASET_FRAME_COUNT * 1 / 30
-Z = 33.33333  # Zoom from 0 to Z
-M = 4  # Multiplier for the zoomed area
-WINDOW_SIZE = 60
-yticks = sorted(list(np.linspace(0, MAXY, MAXY // 10 + 1, endpoint=True).astype(int)) + [Z])
-yticks_labels = yticks.copy()
-# yticks_labels[yticks_labels.index(Z)] = f"{Z:.0f}"
-yticks_labels[yticks_labels.index(Z)] = f"{Z:.0f}"
+CONFIGS: dict[str, dict] = {
+    "msdmg": dict(fps=30, zoom=33.3),
+    "msdmo": dict(fps=30, zoom=33.3),
+    "msdmi": dict(fps=54, zoom=18.5),
+    "euroc":  dict(fps=20, zoom=50.0),
+    "tum":    dict(fps=30, zoom=33.3),
+}
 
-COLORS = [
+SYSTEMS: dict[str, str] = {
+    "Basalt-VIO":     "basalt",
+    "Basalt-LC": "basalt_lc",
+    "Basalt-LC-CQ": "basalt_lc_cq",
+    "OKVIS2":     "okvis2",
+    "ORB-SLAM3":  "orbslam3",
+    "DM-VIO":     "dmvio",
+    "SnakeSLAM":  "snakeslam",
+}
+
+COLORS: list[str] = [
     "#2196F3",  # blue
     "#4CAF50",  # green
     "#FFC107",  # amber
@@ -44,94 +46,162 @@ COLORS = [
     "#009688",  # teal
 ]
 
+DEFAULT_SYSTEMS = ["Basalt", "OKVIS2", "ORB-SLAM3"]
 
-def statistics(name, arr: np.ndarray):
+
+def _parse_csv(path: Path) -> tuple[list[int], list[int]]:
+    """Return (frame_timestamps_ns, wall_timestamps_ns) from a timing CSV."""
+    rows = [l for l in path.read_text().splitlines() if not l.startswith("#")]
+    frames = [int(r.split(",")[0]) for r in rows]
+    walls  = [int(r.split(",")[1]) for r in rows]
+    return frames, walls
+
+
+def load_system_timings(
+    system_dir: str, dataset: str
+) -> tuple[np.ndarray, np.ndarray]:
+    """Load in/out CSVs for one system and return (frame_ts_ns, latency_ms)."""
+    base = Path(system_dir) / dataset
+    in_frames,  in_walls  = _parse_csv(base / "in.csv")
+    out_frames, out_walls = _parse_csv(base / "out.csv")
+    if in_frames != out_frames:
+        raise ValueError(f"Frame mismatch in {base}")
+    frame_ts_ns = np.array(in_frames)
+    latency_ms  = (np.array(out_walls) - np.array(in_walls)) / 1e6
+    return frame_ts_ns, latency_ms
+
+
+def infer_dataset_meta(system_dir: str, dataset: str) -> tuple[int, int]:
+    """Return (frame_count, first_timestamp_ns) from the first system's in.csv."""
+    frames, _ = _parse_csv(Path(system_dir) / dataset / "in.csv")
+    return len(frames), frames[0]
+
+
+def print_statistics(name: str, latency_ms: np.ndarray) -> None:
     print(f"[{name}]")
-    print(f"mean={arr.mean():.2f}ms")
-    print(f"median={median(arr):.2f}ms")
-    print(f"std={arr.std():.2f}ms")
-    print(f"min={arr.min():.2f}ms")
-    print(f"max={arr.max():.2f}ms")
-    print()
+    print(f"  mean   = {latency_ms.mean():.2f} ms")
+    print(f"  median = {median(latency_ms):.2f} ms")
+    print(f"  std    = {latency_ms.std():.2f} ms")
+    print(f"  min    = {latency_ms.min():.2f} ms")
+    print(f"  max    = {latency_ms.max():.2f} ms")
 
 
-def moving_average(data, window_size=WINDOW_SIZE):
-    return np.convolve(data, np.ones(window_size) / window_size, mode="valid")
+def moving_average(data: np.ndarray, window: int) -> np.ndarray:
+    return np.convolve(data, np.ones(window) / window, mode="valid")
 
 
-ins = ["basalt/in.csv", "okvis2/in.csv", "orbslam3/in.csv", "dmvio/in.csv", "snakeslam/in.csv"]
-outs = ["basalt/out.csv", "okvis2/out.csv", "orbslam3/out.csv", "dmvio/out.csv", "snakeslam/out.csv"]
-names = ["Basalt", "OKVIS2", "ORB-SLAM3", "DM-VIO", "SnakeSLAM"]
-zorder = [5, 4, 5, 1, 1]
-totals = [24.38, 146.20, 209.63, 95.07, 40.96]  # Basalt and snakeslame totals are from parallel runs
-# It is unfair for snakeslam and ORB-SLAM3 to show 40.96, because i am not showing ATE for global ba
+def plot_system(
+    ax: plt.Axes,
+    xs: np.ndarray,
+    ys: np.ndarray,
+    name: str,
+    color: str,
+    zorder: int,
+    window: int,
+    show_mean: bool = False,
+) -> None:
+    """Plot raw timings (faint) and their moving average for one system."""
+    ax.plot(xs, ys, alpha=0.15, color=color, label="", zorder=zorder)
+    ma = moving_average(ys, window)
+    if show_mean:
+        name += f" ({ys.mean():.1f} ± {ys.std():.1f} ms)"
+    ax.plot(
+        xs[: len(ma)], ma,
+        color=color, alpha=0.7, label=name, zorder=zorder - 10,
+    )
 
-fig, ax = plt.subplots(figsize=(IMG_WIDTH / DPI, IMG_HEIGHT / DPI), dpi=DPI)
-fig.tight_layout(pad=1.75)
-plt.ylim(0, MAXY)
-plt.xlim(0, MAXX)
+
+def build_figure(args: argparse.Namespace) -> plt.Figure:
+    cfg = CONFIGS[args.config]
+    first_system_dir = SYSTEMS[args.systems[0]]
+    frame_count, first_ts = infer_dataset_meta(first_system_dir, args.dataset)
+
+    maxx     = frame_count / cfg["fps"]
+    realtime = args.realtime if args.realtime is not None else cfg["zoom"]
+    title    = args.title or f"Frame timings on {args.dataset} dataset"
+
+    fig, ax = plt.subplots(
+        figsize=(args.width / args.dpi, args.height / args.dpi),
+        dpi=args.dpi,
+    )
+    fig.tight_layout(pad=1.75)
+    ax.set_xlim(0, maxx)
+    ax.set_ylim(0, 100)
+    ax.axhline(y=realtime, color="#F44336", linestyle="--", alpha=1.0,
+               label=f"Real-time ({realtime:.0f} ms)")
+
+    for name, color, zorder in zip(args.systems, cycle(COLORS), range(3, 3 + len(args.systems))):
+        frame_ts, latency_ms = load_system_timings(SYSTEMS[name], args.dataset)
+        xs = (frame_ts - first_ts) / 1e9
+        plot_system(ax, xs, latency_ms, name, color, zorder, args.window, args.show_mean)
+        print_statistics(name, latency_ms)
+
+    ax.set_xlabel("Dataset time [s]", fontsize=14)
+    ax.set_ylabel("Frame time [ms]", labelpad=0, fontsize=14)
+    ax.set_title(title, fontsize=16)
+    ax.legend(loc="upper center", ncol=len(args.systems), columnspacing=1, handlelength=1.5)
+    ax.grid(visible=True, alpha=0.3)
+
+    return fig
 
 
-# Set y scale to be linear from 0-Z, and then 2x from Z-MAXY
-# plt.fill_between(xs, 0, Z, color="gray", alpha=0.1)
-# plt.fill_between([0, MAXX], Z, MAXY, color="#ECEFF1", alpha=1.0)
-plt.axhline(y=Z, color="#F44336", linestyle="--", alpha=1.0)
-f_fwd = lambda ys: np.vectorize(lambda x: x if x < Z else Z + (x - Z) / M, otypes=[ys.dtype])(ys)
-f_bwd = lambda ys: np.vectorize(lambda x: x if x < Z else Z + (x - Z) * M, otypes=[ys.dtype])(ys)
-plt.yscale("function", functions=(f_fwd, f_bwd))
-plt.yticks(yticks, yticks_labels)
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Plot per-frame timings for VIO/SLAM systems."
+    )
+    parser.add_argument(
+        "--dataset", "-d",
+        required=True,
+        help="Dataset name — must match the subdirectory inside each system folder (e.g. MGO04)",
+    )
+    parser.add_argument(
+        "--config", "-c",
+        required=True,
+        choices=list(CONFIGS.keys()),
+        help=f"Dataset family config (sets fps and real-time budget). Choices: {list(CONFIGS.keys())}",
+    )
+    parser.add_argument(
+        "--systems", "-s",
+        nargs="+",
+        default=DEFAULT_SYSTEMS,
+        choices=list(SYSTEMS.keys()),
+        metavar="SYSTEM",
+        help=f"Systems to include. Available: {list(SYSTEMS.keys())}. Default: {DEFAULT_SYSTEMS}",
+    )
+    parser.add_argument("--maxy",   type=float, default=200.0, help="Max y-axis value in ms (default: 200)")
+    parser.add_argument("--window", "-w", type=int, default=60, help="Moving-average window in frames (default: 60)")
+    parser.add_argument("--width",  type=int, default=1024, help="Figure width in pixels (default: 1024)")
+    parser.add_argument("--height", type=int, default=640,  help="Figure height in pixels (default: 640)")
+    parser.add_argument("--dpi",    type=int, default=150,  help="DPI (default: 150)")
+    parser.add_argument("--title",  type=str, default=None, help="Plot title (default: auto-generated)")
+    parser.add_argument(
+        "--output", "-o",
+        type=str, default=None,
+        help="Save figure to this file instead of displaying it (e.g. plot.pdf)",
+    )
+    parser.add_argument(
+        "--realtime", "-r",
+        type=float, default=None,
+        help="Y value (ms) for the real-time budget line (default: from config)",
+    )
+    parser.add_argument(
+        "--show-mean", "-m",
+        action="store_true",
+        default=False,
+        help="Overlay a horizontal dotted line for the mean latency of each system and add it to the legend",
+    )
+    return parser
 
-colors = cycle(COLORS)
-for name, in_fn, out_fn, color, zorder in zip(names, ins, outs, colors, zorder):
-    incsv = open(in_fn).readlines()
-    outcsv = open(out_fn).readlines()
-    assert len(incsv) == len(outcsv)
 
-    in_frames = [int(l.split(",")[0].strip()) for l in incsv if not l.startswith("#")]
-    out_frames = [int(l.split(",")[0].strip()) for l in outcsv if not l.startswith("#")]
-    assert in_frames == out_frames, name
-    xs = (np.array(in_frames) - DATASET_FIRST_TS) / 1e9
+def main() -> None:
+    args = build_parser().parse_args()
+    fig = build_figure(args)
+    if args.output:
+        fig.savefig(args.output, bbox_inches="tight")
+        print(f"Saved figure to {args.output}")
+    else:
+        plt.show()
 
-    in_tss = [int(l.split(",")[1].strip()) for l in incsv if not l.startswith("#")]
-    out_tss = [int(l.split(",")[1].strip()) for l in outcsv if not l.startswith("#")]
-    diff_tss = (np.array(out_tss) - np.array(in_tss)) / 1e6
-    ys = diff_tss
 
-    plot0 = plt.plot(xs, ys, alpha=0.15, color=color, label="", zorder=zorder)
-    plt.plot(xs[: len(moving_average(ys))], moving_average(ys), color=plot0[0].get_color(), alpha=0.7, label=name, zorder=zorder - 10)
-
-    # plt.plot(xs[: len(moving_average(ys))], moving_average(ys), color=color, alpha=0.7, label=name, zorder=zorder)
-
-    # plot0 = plt.plot(xs, ys, alpha=0.5, color=color, label="", zorder=zorder)
-    # plt.plot(xs[: len(moving_average(ys))], moving_average(ys), color=plot0[0].get_color(), alpha=0.7, label=name, zorder=zorder)
-
-    statistics(name, diff_tss)
-
-plt.xlabel("Dataset time [s]", fontsize=14)
-plt.ylabel("Frame time [ms]", labelpad=0, fontsize=14)
-plt.title("Frame timings on MOO02 dataset", fontsize=16)
-
-plt.legend(loc="upper center", ncol=len(names), columnspacing=1, handlelength=1.5)  # fontsize="small"?
-plt.grid(visible=True, alpha=0.3)
-plt.show()
-
-"""
-// printf(">>> Create in.csv\n");
-// auto incsv = std::ofstream{"in.csv"};
-// incsv << "#t_ns,in_ts" << std::endl;
-//   int64_t t_ns = img->t_ns;
-//   int64_t in_ns = std::chrono::steady_clock::now().time_since_epoch().count();
-//   incsv << t_ns << "," << in_ns << std::endl;
-// printf(">>> Close in.csv\n");
-// incsv.close();
-
-// printf(">>> Create out.csv\n");
-// auto outcsv = std::ofstream{"out.csv"};
-// outcsv << "#t_ns,out_ts" << std::endl;
-//   int64_t t_ns = img->t_ns;
-//   int64_t out_ns = std::chrono::steady_clock::now().time_since_epoch().count();
-//   outcsv << t_ns << "," << out_ns << std::endl;
-// printf(">>> Close out.csv\n");
-// outcsv.close();export ds=/media/mateo/1A70DA1470D9F68B/monado-slam-datasets/M_monado_datasets/MO_odyssey_plus/MOO_others/MOO02_hand_puncher_2
-
-"""
+if __name__ == "__main__":
+    main()
