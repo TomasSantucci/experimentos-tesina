@@ -459,8 +459,104 @@ def plot_heatmaps(ates, rtes, completions, successes, dataset_names, system_name
     plt.show()
 
 
+def write_latex_table(
+    ates, rtes, completions, dataset_names, system_names,
+    output_file="table.tex", caption="", label="tab:benchmark"
+):
+    n_sys = len(system_names)
+
+    DISPLAY_NAMES = {"Median": "Mediana", "Average": "Promedio"}
+    SUMMARY = {"Median", "Average"}
+
+    def is_bad_err(v):
+        return v == U or v == N
+
+    def is_bad_comp(v):
+        return v == -U or v == -N
+
+    def fmt_err(v):
+        return "--" if is_bad_err(v) else f"{v:.1f}"
+
+    def fmt_comp(v):
+        return "--" if is_bad_comp(v) else f"{v:.0f}"
+
+    def make_cells(values, fmt_fn, is_bad_fn, lower_is_better=True):
+        valid = [v for v in values if not is_bad_fn(v)]
+        best = (min(valid) if lower_is_better else max(valid)) if valid else None
+        cells = []
+        for v in values:
+            s = fmt_fn(v)
+            if best is not None and not is_bad_fn(v) and v == best:
+                s = f"\\textbf{{{s}}}"
+            cells.append(s)
+        return cells
+
+    col_spec = "l " + "r" * n_sys + " | " + "r" * n_sys + " | " + "r" * n_sys
+
+    lines = []
+    lines.append(r"\begin{table}[ht]")
+    lines.append(r"\centering")
+    if caption:
+        lines.append(f"\\caption{{{caption}}}")
+    if label:
+        lines.append(f"\\label{{{label}}}")
+    lines.append(f"\\begin{{tabular}}{{{col_spec}}}")
+    lines.append(r"\toprule")
+
+    # Metric group header
+    lines.append(
+        f"& \\multicolumn{{{n_sys}}}{{c|}}{{\\textbf{{ATE [cm]}}}}"
+        f" & \\multicolumn{{{n_sys}}}{{c|}}{{\\textbf{{RTE [cm]}}}}"
+        f" & \\multicolumn{{{n_sys}}}{{c}}{{\\textbf{{Completitud (\\%)}}}} \\\\"
+    )
+    lines.append(
+        f"\\cmidrule(lr){{2-{n_sys + 1}}}"
+        f" \\cmidrule(lr){{{n_sys + 2}-{2 * n_sys + 1}}}"
+        f" \\cmidrule(lr){{{2 * n_sys + 2}-{3 * n_sys + 1}}}"
+    )
+
+    # Rotated system-name header
+    sys_cells = []
+    for _ in range(3):
+        for sys in system_names:
+            sys_esc = sys.replace("_", r"\_").replace("&", r"\&")
+            sys_cells.append(f"\\rotatebox{{90}}{{\\textbf{{{sys_esc}}}\\,}}")
+    lines.append("\\textbf{Secuencia}\n& " + "\n& ".join(sys_cells) + " \\\\")
+
+    lines.append(r"\midrule")
+
+    # Data rows
+    summary_midrule_done = False
+    for i_ds, ds in enumerate(dataset_names):
+        if ds in SUMMARY and not summary_midrule_done:
+            lines.append(r"\midrule")
+            summary_midrule_done = True
+
+        ate_row = ates[:, i_ds]
+        rte_row = rtes[:, i_ds]
+        comp_row = completions[:, i_ds]
+
+        cells = (
+            make_cells(ate_row, fmt_err, is_bad_err, lower_is_better=True)
+            + make_cells(rte_row, fmt_err, is_bad_err, lower_is_better=True)
+            + make_cells(comp_row, fmt_comp, is_bad_comp, lower_is_better=False)
+        )
+        display = DISPLAY_NAMES.get(ds, ds)
+        lines.append(display + " & " + " & ".join(cells) + " \\\\")
+
+    lines.append(r"\bottomrule")
+    lines.append(r"\end{tabular}")
+    lines.append(r"\end{table}")
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+    print(f"LaTeX table written to {output_file}")
+
+
 def main():
     plot_heatmaps(ates, rtes, completions, successes, DATASETS, SYSTEMS)
+    write_latex_table(ates, rtes, completions, DATASETS, SYSTEMS, output_file="table.tex")
     print(
         """
         Now edit in inkscape and remember to do the following:
