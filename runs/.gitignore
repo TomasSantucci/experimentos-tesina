@@ -1,0 +1,9 @@
+# Ignore everything in runs/ ...
+*
+# ... but descend into subdirectories ...
+!*/
+# ... and keep the batch.json result files (and this file).
+!*batch.json
+!report.html
+!ref.txt
+!.gitignore

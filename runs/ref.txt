@@ -1,0 +1,19 @@
+1- Corrida de basalt main sin loop closure (evalsets, determinista)
+https://mateosss.pages.freedesktop.org/-/basalt/-/jobs/99328014/artifacts/report.html
+report job: https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/99328014
+
+2- Corrida de basalt con loop closure y rootba (evalsets, determinista)
+https://mateosss.pages.freedesktop.org/-/basalt/-/jobs/99206856/artifacts/report.html
+report job: https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/99206856
+
+3- Corrida de basalt con loop closure, CQ y rootba (evalsets, determinista)
+https://mateosss.pages.freedesktop.org/-/basalt/-/jobs/99477969/artifacts/report.html
+report job: https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/99477969
+
+4- Corridas de basalt con loop closure y rootba. (timing-evalsets, no determinista)
+https://mateosss.pages.freedesktop.org/-/basalt/-/jobs/99392746/artifacts/report.html
+report job: https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/99392746
+
+5- Corridas de basalt con loop closure. Usando rootba float vs double. (timing-evalsets, determinista)
+https://mateosss.pages.freedesktop.org/-/basalt/-/jobs/99426109/artifacts/report.html
+report job: https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/99426109
