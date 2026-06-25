@@ -27,8 +27,24 @@ import numpy as np
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib import rcParams
 from mpl_toolkits.mplot3d import Axes3D          # noqa: F401 (registers 3d projection)
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
+
+rcParams["font.family"] = "CMU Serif"
+# CMU Serif's regular face reports weight 500, so the default "normal" (400)
+# never matches; align every weight rcParam to 500 to avoid findfont warnings.
+rcParams["font.weight"] = 500
+rcParams["axes.labelweight"] = 500
+rcParams["axes.titleweight"] = 500
+rcParams["figure.titleweight"] = 500
+rcParams["font.size"] = 16
+rcParams["axes.labelsize"] = 16
+rcParams["xtick.labelsize"] = 12
+rcParams["ytick.labelsize"] = 12
+rcParams["legend.fontsize"] = 12
+rcParams["pdf.fonttype"] = 42
+rcParams["ps.fonttype"] = 42
 
 
 # ── helpers ──────────────────────────────────────────────────────────────────
@@ -104,14 +120,24 @@ def plot_trajectory(traj_path: str, log_path: str, title: str = None) -> plt.Fig
     fig.patch.set_facecolor("white")
     ax.set_facecolor("white")
 
+    # ── styling: soft panes, light gridlines, gentle viewing angle ──
+    ax.view_init(elev=22, azim=-58)
+    for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
+        axis.set_pane_color((0.985, 0.985, 0.99, 1.0))
+        axis.pane.set_edgecolor((0.85, 0.85, 0.85, 1.0))
+        axis.pane.set_linewidth(0.6)
+        axis._axinfo["grid"].update(color=(0.86, 0.86, 0.88, 1.0), linewidth=0.6)
+        axis.set_tick_params(colors="#444444", length=3, pad=4)
+
     # Trajectory line
     ax.plot(
         traj["x"].values,
         traj["y"].values,
         traj["t_sec"].values,
-        color="#000000",
-        linewidth=0.8,
-        alpha=0.85,
+        color="#2b2b2b",
+        linewidth=1.4,
+        solid_capstyle="round",
+        alpha=0.9,
         label="Trajectory",
         zorder=2,
     )
@@ -123,17 +149,18 @@ def plot_trajectory(traj_path: str, log_path: str, title: str = None) -> plt.Fig
         x2, y2, t2 = nearest_pose(traj, ev["ts_cand"])
 
         if ev["accepted"]:
-            color, lw, zo = "#a72d11", 1.8, 4
+            color, lw, al, zo = "#1a9850", 2.0, 0.9, 4
             n_accepted += 1
         else:
-            color, lw, zo = "#189044", 1.0, 3
+            color, lw, al, zo = "#d73027", 1.1, 0.5, 3
             n_rejected += 1
 
         ax.plot(
             [x1, x2], [y1, y2], [t1, t2],
             color=color,
             linewidth=lw,
-            alpha=0.75,
+            alpha=al,
+            solid_capstyle="round",
             zorder=zo,
         )
 
@@ -141,17 +168,27 @@ def plot_trajectory(traj_path: str, log_path: str, title: str = None) -> plt.Fig
     from matplotlib.lines import Line2D
     handles, labels = ax.get_legend_handles_labels()
     handles += [
-        Line2D([0], [0], color="#189044", linewidth=1.5,
+        Line2D([0], [0], color="#d73027", linewidth=1.6,
                label=f"Loop detected – rejected ({n_rejected})"),
-        Line2D([0], [0], color="#a72d11", linewidth=1.8,
+        Line2D([0], [0], color="#1a9850", linewidth=2.0,
                label=f"Loop closed – accepted ({n_accepted})"),
     ]
 
-    ax.set_xlabel("x (m)", labelpad=8)
-    ax.set_ylabel("y (m)", labelpad=8)
-    ax.set_zlabel("time (s)", labelpad=8)
+    ax.set_xlabel("x (m)", labelpad=10)
+    ax.set_ylabel("y (m)", labelpad=10)
+    ax.set_zlabel("time (s)", labelpad=10)
 
-    ax.legend(handles=handles, loc="upper left", fontsize=8, framealpha=0.6)
+    legend = ax.legend(
+        handles=handles,
+        loc="upper left",
+        framealpha=0.92,
+        edgecolor="#cccccc",
+        fancybox=True,
+        borderpad=0.8,
+        labelspacing=0.6,
+        handlelength=1.8,
+    )
+    legend.get_frame().set_linewidth(0.6)
 
     fig.tight_layout()
     return fig
