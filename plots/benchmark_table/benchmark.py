@@ -13,14 +13,17 @@ import numpy as np
 import json
 
 CAUSAL = False # Set to False to show fully postprocessed bundle adjustment results]
-BATCH_DIR = "../../data"
-DS_PREFIX = "MO"  # Set to a string (e.g. "MI") to only include datasets with that prefix
+BATCH_DIR = "data"
+DS_PREFIX = "TO"  # Set to a string (e.g. "MI") to only include datasets with that prefix
 
 UNK = -1234567890  # (?) Represents an unknown value, latest data doesnt have it
 NA = -1234567891  # (—)
 
-DATASETS = ["MIO01","MIO02","MIO03","MIO04","MIO05","MIO06","MIO07","MIO08","MIO09","MIO10","MIO11","MIO12","MIO13","MIO14","MIO15","MIO16","MIPB01","MIPB02","MIPB03","MIPB04","MIPB05","MIPB06","MIPB07","MIPB08","MIPP01","MIPP02","MIPP03","MIPP04","MIPP05","MIPP06","MIPT01","MIPT02","MIPT03","MGO01","MGO02","MGO03","MGO04","MGO05","MGO06","MGO07","MGO08","MGO09","MGO10","MGO11","MGO12","MGO13","MGO14","MGO15","MOO01","MOO02","MOO03","MOO04","MOO05","MOO06","MOO07","MOO08","MOO09","MOO10","MOO11","MOO12","MOO13","MOO14","MOO15","MOO16"]  # fmt: skip
-assert len(set(DATASETS)) == 64
+DATASETS_MSD = ["MIO01","MIO02","MIO03","MIO04","MIO05","MIO06","MIO07","MIO08","MIO09","MIO10","MIO11","MIO12","MIO13","MIO14","MIO15","MIO16","MIPB01","MIPB02","MIPB03","MIPB04","MIPB05","MIPB06","MIPB07","MIPB08","MIPP01","MIPP02","MIPP03","MIPP04","MIPP05","MIPP06","MIPT01","MIPT02","MIPT03","MGO01","MGO02","MGO03","MGO04","MGO05","MGO06","MGO07","MGO08","MGO09","MGO10","MGO11","MGO12","MGO13","MGO14","MGO15","MOO01","MOO02","MOO03","MOO04","MOO05","MOO06","MOO07","MOO08","MOO09","MOO10","MOO11","MOO12","MOO13","MOO14","MOO15","MOO16"]  # fmt: skip
+DATASETS_EUROC = ["EMH01","EMH02","EMH03","EMH04","EMH05","EV101","EV102","EV103","EV201","EV202","EV203"]  # fmt: skip
+DATASETS_TUMVI = ["TC1","TC2","TC3","TC4","TC5","TM1","TM2","TM3","TM4","TM5","TM6","TO1","TO2","TO3","TO4","TO5","TO6","TO7","TO8","TR1","TR2","TR3","TR4","TR5","TR6","TS1","TS2","TS3"]
+DATASETS = DATASETS_MSD + DATASETS_EUROC + DATASETS_TUMVI
+#assert len(set(DATASETS)) == 39
 if DS_PREFIX:
     DATASETS = [ds for ds in DATASETS if ds.startswith(DS_PREFIX)]
 
@@ -185,11 +188,10 @@ def get_snakeslam_results(causal=True):
     return select_runs(storage, selected_runs)
 
 
-basalt_results = get_basalt_results(CAUSAL)
-dmvio_results = get_dmvio_results()
+basalt_results = get_basalt_results(causal=True)
+basaltlcr_results = get_basalt_results(causal=False)
 orbslam3_results = get_orbslam3_results(CAUSAL)
 okvis2_results = get_okvis2_results(CAUSAL)
-snakeslam_results = get_snakeslam_results(CAUSAL)
 
 # Set font to CMU Serif
 plt.rcParams["font.family"] = ["CMU serif", "Sans-serif"]
@@ -230,11 +232,11 @@ successes_cmap = create_cmap(["#ECEFF1", "#4e5e6f"])  # lighter dark grey
 # completions_cmap = create_cmap(["#fff2c9", "#ffd966"])  # Amber
 
 if CAUSAL:
-    SYSTEMS = ["Basalt", "OKVIS2", "ORB-SLAM3", "DM-VIO", "SnakeSLAM"]
-    RESULTS = [basalt_results, okvis2_results, orbslam3_results, dmvio_results, snakeslam_results]
+    SYSTEMS = ["Basalt", "BasaltLCR", "OKVIS2", "ORB-SLAM3"]
+    RESULTS = [basalt_results, basaltlcr_results, okvis2_results, orbslam3_results]
 else:
-    SYSTEMS = ["Basalt", "OKVIS2", "ORB-SLAM3", "SnakeSLAM"]
-    RESULTS = [basalt_results, okvis2_results, orbslam3_results, snakeslam_results]
+    SYSTEMS = ["Basalt", "BasaltLCR", "OKVIS2", "ORB-SLAM3"]
+    RESULTS = [basalt_results, basaltlcr_results, okvis2_results, orbslam3_results]
 
 # Sample data as before
 ates = np.ones((len(SYSTEMS), len(DATASETS))) * -1
@@ -303,15 +305,23 @@ print(f"{rte_ltth=}")
 print(f"{comp_ltth=}")
 print(f"{succ_ltth=}")
 
-ATE_DIVERGE_FROM = 10 * M_SCALER * 1000  # 10m
-ates_sorted = sorted(ates.reshape((-1,)))
-ates_sorted = [x for x in ates_sorted if x <= ATE_DIVERGE_FROM]
-ate_p90 = ates_sorted[int(len(ates_sorted) * 0.9)]
+def sorted_and_p90(values, diverge_from, name):
+    # Non-divergent values, sorted, plus their p90 (used as the colormap upper bound)
+    finite = [x for x in values.reshape((-1,)) if np.isfinite(x)]
+    kept = [x for x in sorted(finite) if x <= diverge_from]
+    if not kept:  # Every run diverged (e.g. hard subsets like TO*), use the full range
+        print(f"warning: all {name} values are above {diverge_from}, ignoring the divergence cutoff")
+        kept = sorted(finite)
+    if not kept:  # No usable value at all
+        return [0.0, diverge_from], diverge_from
+    return kept, kept[int(len(kept) * 0.9)]
 
-RTE_DIVERGE_FROM = 0.1 * M_SCALER * 1000 # 10cm
-rtes_sorted = sorted(rtes.reshape((-1,)))
-rtes_sorted = [x for x in rtes_sorted if x <= RTE_DIVERGE_FROM]
-rte_p90 = rtes_sorted[int(len(rtes_sorted) * 0.9)]
+
+ATE_DIVERGE_FROM = 10 * M_SCALER  # 10m
+ates_sorted, ate_p90 = sorted_and_p90(ates, ATE_DIVERGE_FROM, "ATE")
+
+RTE_DIVERGE_FROM = 0.1 * M_SCALER # 10cm
+rtes_sorted, rte_p90 = sorted_and_p90(rtes, RTE_DIVERGE_FROM, "RTE")
 
 SUCCESS_FROM = 98  # From 98% we just print the checkmark
 
@@ -360,9 +370,17 @@ DATASETS += ["Average"]
 
 
 def plot_heatmaps(ates, rtes, completions, successes, dataset_names, system_names):
+    # Fixed height per row (in inches) so rows keep the same height regardless
+    # of how many datasets are plotted.
+    ROW_HEIGHT = 0.19  # inches per row
+    FIG_WIDTH = 6.4638
+    VERTICAL_MARGIN = 1.7  # inches reserved for titles, ticks and colorbar
+
+    n_rows = len(dataset_names)
+    fig_height = n_rows * ROW_HEIGHT + VERTICAL_MARGIN
+
     # fig, axes = plt.subplots(1, 3, figsize=(12, 18), constrained_layout=True)
-    fig, axes = plt.subplots(1, 3, figsize=(8, 24), constrained_layout=True)
-    fig.set_size_inches(6.4638, 13.625625)  # Arbitrary size that doesnt look to tight
+    fig, axes = plt.subplots(1, 3, figsize=(FIG_WIDTH, fig_height), constrained_layout=True)
 
     # cbar_kws = {'shrink': 0.2, 'label': '', 'ticks': []}  # Customize as needed
     cbar_kws = {"orientation": "horizontal", "location": "bottom"}
