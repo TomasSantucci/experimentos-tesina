@@ -124,7 +124,10 @@ def select_index(ds, completion, success, ate_avg, ate_std, rte_avg, rte_std):
 
 def get_basalt_results(causal=True):
     SYSTEMS = ["basalt" if causal else "basalt.full"]
-    DETERMINISTIC_RUN = f"{SYSTEMS[0]}.det"
+    if causal:
+        DETERMINISTIC_RUN = f"{SYSTEMS[0]}.det"
+    else:
+        DETERMINISTIC_RUN = f"{SYSTEMS[0]}.pg.det"
 
     def select_run_basalt(storage, ds):
         assert ds in storage["completion"][DETERMINISTIC_RUN]
@@ -136,7 +139,7 @@ def get_basalt_results(causal=True):
 
 
 def get_okvis2_results(causal=True):
-    SYSTEMS = ["okvis2.vio" if causal else "okvis2.slamfinal"]
+    SYSTEMS = ["okvis2.vio" if causal else "okvis2.slamfull"]
     RUNS = [f"{SYSTEMS[0]}.{i}" for i in [1, 2, 3]]
     storage = load_storage(SYSTEMS)
     selected_runs = {ds: select_run(storage, ds, RUNS) for ds in DATASETS}
@@ -237,6 +240,25 @@ if CAUSAL:
 else:
     SYSTEMS = ["Basalt", "BasaltLCR", "OKVIS2", "ORB-SLAM3"]
     RESULTS = [basalt_results, basaltlcr_results, okvis2_results, orbslam3_results]
+
+
+def print_selected_runs(system_names, results, dataset_names):
+    # Show which run was picked for each (system, dataset) pair
+    print("\nSelected runs:")
+    cols = [
+        [results[i]["selected"][ds] for ds in dataset_names] for i in range(len(system_names))
+    ]
+    ds_w = max([len("Sequence")] + [len(ds) for ds in dataset_names])
+    widths = [max([len(sys)] + [len(r) for r in col]) for sys, col in zip(system_names, cols)]
+    header = "  ".join(sys.ljust(w) for sys, w in zip(system_names, widths))
+    print(f"{'Sequence'.ljust(ds_w)}  {header}")
+    for i_ds, ds in enumerate(dataset_names):
+        row = "  ".join(col[i_ds].ljust(w) for col, w in zip(cols, widths))
+        print(f"{ds.ljust(ds_w)}  {row}")
+    print()
+
+
+print_selected_runs(SYSTEMS, RESULTS, DATASETS)
 
 # Sample data as before
 ates = np.ones((len(SYSTEMS), len(DATASETS))) * -1
