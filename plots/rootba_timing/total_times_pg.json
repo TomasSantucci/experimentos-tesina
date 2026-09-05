@@ -1,0 +1,624 @@
+{
+  "RootBA double": {
+    "EMH01": {
+      "total_time": 4.597
+    },
+    "EMH02": {
+      "total_time": 3.176
+    },
+    "EMH03": {
+      "total_time": 0.841
+    },
+    "EMH04": {
+      "total_time": 2.014
+    },
+    "EMH05": {
+      "total_time": 1.804
+    },
+    "EV101": {
+      "total_time": 3.182
+    },
+    "EV102": {
+      "total_time": 1.425
+    },
+    "EV103": {
+      "total_time": 1.982
+    },
+    "EV201": {
+      "total_time": 2.32
+    },
+    "EV202": {
+      "total_time": 4.28
+    },
+    "EV203": {
+      "total_time": 0.513
+    },
+    "MGO01": {
+      "total_time": 2.058
+    },
+    "MGO02": {
+      "total_time": 4.134
+    },
+    "MGO03": {
+      "total_time": 3.075
+    },
+    "MGO04": {
+      "total_time": 3.098
+    },
+    "MGO05": {
+      "total_time": 2.269
+    },
+    "MGO06": {
+      "total_time": 1.648
+    },
+    "MGO07": {
+      "total_time": 0.334
+    },
+    "MGO08": {
+      "total_time": 0.073
+    },
+    "MGO09": {
+      "total_time": 0.007
+    },
+    "MGO10": {
+      "total_time": 0.037
+    },
+    "MGO11": {
+      "total_time": 0.068
+    },
+    "MGO12": {
+      "total_time": 32.009
+    },
+    "MGO13": {
+      "total_time": 3.552
+    },
+    "MGO14": {
+      "total_time": 1.244
+    },
+    "MGO15": {
+      "total_time": 1.754
+    },
+    "MIO01": {
+      "total_time": 3.364
+    },
+    "MIO02": {
+      "total_time": 1.797
+    },
+    "MIO03": {
+      "total_time": 5.313
+    },
+    "MIO04": {
+      "total_time": 5.153
+    },
+    "MIO05": {
+      "total_time": 3.987
+    },
+    "MIO06": {
+      "total_time": 3.775
+    },
+    "MIO07": {
+      "total_time": 2.328
+    },
+    "MIO08": {
+      "total_time": 0.812
+    },
+    "MIO09": {
+      "total_time": 0.009
+    },
+    "MIO10": {
+      "total_time": 0.072
+    },
+    "MIO11": {
+      "total_time": 0.071
+    },
+    "MIO12": {
+      "total_time": 37.987
+    },
+    "MIO13": {
+      "total_time": 4.101
+    },
+    "MIO14": {
+      "total_time": 5.455
+    },
+    "MIO15": {
+      "total_time": 8.24
+    },
+    "MIO16": {
+      "total_time": 8.736
+    },
+    "MIPB01": {
+      "total_time": 29.214
+    },
+    "MIPB02": {
+      "total_time": 18.768
+    },
+    "MIPB03": {
+      "total_time": 27.465
+    },
+    "MIPB04": {
+      "total_time": 23.837
+    },
+    "MIPB05": {
+      "total_time": 14.152
+    },
+    "MIPB06": {
+      "total_time": 63.208
+    },
+    "MIPB07": {
+      "total_time": 32.138
+    },
+    "MIPB08": {
+      "total_time": 3.195
+    },
+    "MIPP01": {
+      "total_time": 1.785
+    },
+    "MIPP02": {
+      "total_time": 3.779
+    },
+    "MIPP03": {
+      "total_time": 4.395
+    },
+    "MIPP04": {
+      "total_time": 4.43
+    },
+    "MIPP05": {
+      "total_time": 4.584
+    },
+    "MIPP06": {
+      "total_time": 3.865
+    },
+    "MIPT01": {
+      "total_time": 8.302
+    },
+    "MIPT02": {
+      "total_time": 8.271
+    },
+    "MIPT03": {
+      "total_time": 5.711
+    },
+    "MOO01": {
+      "total_time": 2.616
+    },
+    "MOO02": {
+      "total_time": 2.652
+    },
+    "MOO03": {
+      "total_time": 3.322
+    },
+    "MOO04": {
+      "total_time": 1.525
+    },
+    "MOO05": {
+      "total_time": 0.666
+    },
+    "MOO06": {
+      "total_time": 3.422
+    },
+    "MOO07": {
+      "total_time": 0.207
+    },
+    "MOO08": {
+      "total_time": 0.033
+    },
+    "MOO09": {
+      "total_time": 0.006
+    },
+    "MOO10": {
+      "total_time": 0.028
+    },
+    "MOO11": {
+      "total_time": 0.061
+    },
+    "MOO12": {
+      "total_time": 27.125
+    },
+    "MOO13": {
+      "total_time": 1.798
+    },
+    "MOO14": {
+      "total_time": 1.531
+    },
+    "MOO15": {
+      "total_time": 4.74
+    },
+    "MOO16": {
+      "total_time": 21.854
+    },
+    "TC1": {
+      "total_time": 30.298
+    },
+    "TC2": {
+      "total_time": 7.948
+    },
+    "TC3": {
+      "total_time": 34.985
+    },
+    "TC4": {
+      "total_time": 10.149
+    },
+    "TC5": {
+      "total_time": 56.634
+    },
+    "TM1": {
+      "total_time": 69.845
+    },
+    "TM2": {
+      "total_time": 105.925
+    },
+    "TM3": {
+      "total_time": 173.898
+    },
+    "TM4": {
+      "total_time": 85.151
+    },
+    "TM5": {
+      "total_time": 20.971
+    },
+    "TM6": {
+      "total_time": 98.374
+    },
+    "TO1": {
+      "total_time": 155.822
+    },
+    "TO2": {
+      "total_time": 39.835
+    },
+    "TO3": {
+      "total_time": 97.804
+    },
+    "TO4": {
+      "total_time": 108.829
+    },
+    "TO5": {
+      "total_time": 6.455
+    },
+    "TO6": {
+      "total_time": 61.382
+    },
+    "TO7": {
+      "total_time": 31.958
+    },
+    "TO8": {
+      "total_time": 143.599
+    },
+    "TR1": {
+      "total_time": 1.185
+    },
+    "TR2": {
+      "total_time": 1.559
+    },
+    "TR3": {
+      "total_time": 1.509
+    },
+    "TR4": {
+      "total_time": 1.642
+    },
+    "TR5": {
+      "total_time": 1.207
+    },
+    "TR6": {
+      "total_time": 1.48
+    },
+    "TS1": {
+      "total_time": 10.146
+    },
+    "TS2": {
+      "total_time": 8.561
+    },
+    "TS3": {
+      "total_time": 14.946
+    }
+  },
+  "RootBA float": {
+    "EMH01": {
+      "total_time": 2.304
+    },
+    "EMH02": {
+      "total_time": 1.57
+    },
+    "EMH03": {
+      "total_time": 0.468
+    },
+    "EMH04": {
+      "total_time": 1.069
+    },
+    "EMH05": {
+      "total_time": 0.888
+    },
+    "EV101": {
+      "total_time": 1.509
+    },
+    "EV102": {
+      "total_time": 0.702
+    },
+    "EV103": {
+      "total_time": 1.068
+    },
+    "EV201": {
+      "total_time": 1.143
+    },
+    "EV202": {
+      "total_time": 2.941
+    },
+    "EV203": {
+      "total_time": 0.273
+    },
+    "MGO01": {
+      "total_time": 0.876
+    },
+    "MGO02": {
+      "total_time": 1.464
+    },
+    "MGO03": {
+      "total_time": 2.196
+    },
+    "MGO04": {
+      "total_time": 1.135
+    },
+    "MGO05": {
+      "total_time": 0.854
+    },
+    "MGO06": {
+      "total_time": 0.714
+    },
+    "MGO07": {
+      "total_time": 0.228
+    },
+    "MGO08": {
+      "total_time": 0.065
+    },
+    "MGO09": {
+      "total_time": 0.005
+    },
+    "MGO10": {
+      "total_time": 0.031
+    },
+    "MGO11": {
+      "total_time": 0.072
+    },
+    "MGO12": {
+      "total_time": 17.945
+    },
+    "MGO13": {
+      "total_time": 4.114
+    },
+    "MGO14": {
+      "total_time": 0.673
+    },
+    "MGO15": {
+      "total_time": 0.845
+    },
+    "MIO01": {
+      "total_time": 1.857
+    },
+    "MIO02": {
+      "total_time": 0.96
+    },
+    "MIO03": {
+      "total_time": 2.719
+    },
+    "MIO04": {
+      "total_time": 2.182
+    },
+    "MIO05": {
+      "total_time": 1.854
+    },
+    "MIO06": {
+      "total_time": 2.028
+    },
+    "MIO07": {
+      "total_time": 0.617
+    },
+    "MIO08": {
+      "total_time": 0.508
+    },
+    "MIO09": {
+      "total_time": 0.009
+    },
+    "MIO10": {
+      "total_time": 0.056
+    },
+    "MIO11": {
+      "total_time": 0.057
+    },
+    "MIO12": {
+      "total_time": 25.602
+    },
+    "MIO13": {
+      "total_time": 1.889
+    },
+    "MIO14": {
+      "total_time": 2.462
+    },
+    "MIO15": {
+      "total_time": 1.205
+    },
+    "MIO16": {
+      "total_time": 4.417
+    },
+    "MIPB01": {
+      "total_time": 12.999
+    },
+    "MIPB02": {
+      "total_time": 8.789
+    },
+    "MIPB03": {
+      "total_time": 14.582
+    },
+    "MIPB04": {
+      "total_time": 10.995
+    },
+    "MIPB05": {
+      "total_time": 4.91
+    },
+    "MIPB06": {
+      "total_time": 14.388
+    },
+    "MIPB07": {
+      "total_time": 15.427
+    },
+    "MIPB08": {
+      "total_time": 1.69
+    },
+    "MIPP01": {
+      "total_time": 1.036
+    },
+    "MIPP02": {
+      "total_time": 1.733
+    },
+    "MIPP03": {
+      "total_time": 2.123
+    },
+    "MIPP04": {
+      "total_time": 2.318
+    },
+    "MIPP05": {
+      "total_time": 2.042
+    },
+    "MIPP06": {
+      "total_time": 1.344
+    },
+    "MIPT01": {
+      "total_time": 5.142
+    },
+    "MIPT02": {
+      "total_time": 4.42
+    },
+    "MIPT03": {
+      "total_time": 3.1
+    },
+    "MOO01": {
+      "total_time": 1.582
+    },
+    "MOO02": {
+      "total_time": 0.739
+    },
+    "MOO03": {
+      "total_time": 1.534
+    },
+    "MOO04": {
+      "total_time": 0.695
+    },
+    "MOO05": {
+      "total_time": 0.31
+    },
+    "MOO06": {
+      "total_time": 1.919
+    },
+    "MOO07": {
+      "total_time": 0.142
+    },
+    "MOO08": {
+      "total_time": 0.028
+    },
+    "MOO09": {
+      "total_time": 0.007
+    },
+    "MOO10": {
+      "total_time": 0.022
+    },
+    "MOO11": {
+      "total_time": 0.099
+    },
+    "MOO12": {
+      "total_time": 8.314
+    },
+    "MOO13": {
+      "total_time": 0.569
+    },
+    "MOO14": {
+      "total_time": 0.686
+    },
+    "MOO15": {
+      "total_time": 2.785
+    },
+    "MOO16": {
+      "total_time": 13.981
+    },
+    "TC1": {
+      "total_time": 14.053
+    },
+    "TC2": {
+      "total_time": 4.433
+    },
+    "TC3": {
+      "total_time": 14.877
+    },
+    "TC4": {
+      "total_time": 5.075
+    },
+    "TC5": {
+      "total_time": 28.032
+    },
+    "TM1": {
+      "total_time": 35.034
+    },
+    "TM2": {
+      "total_time": 60.124
+    },
+    "TM3": {
+      "total_time": 60.966
+    },
+    "TM4": {
+      "total_time": 55.514
+    },
+    "TM5": {
+      "total_time": 11.189
+    },
+    "TM6": {
+      "total_time": 48.271
+    },
+    "TO1": {
+      "total_time": 64.921
+    },
+    "TO2": {
+      "total_time": 20.025
+    },
+    "TO3": {
+      "total_time": 31.666
+    },
+    "TO4": {
+      "total_time": 105.121
+    },
+    "TO5": {
+      "total_time": 3.337
+    },
+    "TO6": {
+      "total_time": 30.312
+    },
+    "TO7": {
+      "total_time": 30.253
+    },
+    "TO8": {
+      "total_time": 41.265
+    },
+    "TR1": {
+      "total_time": 0.71
+    },
+    "TR2": {
+      "total_time": 0.792
+    },
+    "TR3": {
+      "total_time": 0.802
+    },
+    "TR4": {
+      "total_time": 0.84
+    },
+    "TR5": {
+      "total_time": 0.654
+    },
+    "TR6": {
+      "total_time": 0.808
+    },
+    "TS1": {
+      "total_time": 20.418
+    },
+    "TS2": {
+      "total_time": 4.511
+    },
+    "TS3": {
+      "total_time": 18.488
+    }
+  }
+}
