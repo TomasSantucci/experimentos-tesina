@@ -17,3 +17,11 @@ report job: https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/99392746
 5- Corridas de basalt con loop closure. Usando rootba float vs double. (timing-evalsets, determinista)
 https://mateosss.pages.freedesktop.org/-/basalt/-/jobs/99426109/artifacts/report.html
 report job: https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/99426109
+
+6- Corrida de basalt con loop closure y rootba con pose-graph (evalsets, determinista)
+https://mateosss.pages.freedesktop.org/-/basalt/-/jobs/109413767/artifacts/report.html
+report job: https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/109413767
+
+7- Corridas de basalt con loop closure. Usando rootba+pg float vs. double (timing-evalsets, determinista)
+https://mateosss.pages.freedesktop.org/-/basalt/-/jobs/109458238/artifacts/report.html
+report job: https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/109458238

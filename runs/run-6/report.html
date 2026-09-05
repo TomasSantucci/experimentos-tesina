@@ -1,0 +1,3106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Evaluation Report</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!--
+  Copyright 2025, Mateo de Mayo
+  SPDX-License-Identifier: BSD-3-Clause
+
+  Author: Mateo de Mayo <mateo.demayo@tum.de>
+  -->
+
+  <style type="text/css">
+  :root {
+    --md-primary: #03a9f4;
+    --md-primary-variant: #1976d2;
+
+    --md-surface: #ffffff;
+    --md-on-surface: #1f1f1f;
+    --md-border: #e0e0e0;
+    --md-muted: #5f6368;
+
+    --md-code-bg: #f5f5f5;
+    --md-code-fg: #1f1f1f;
+
+    --font-sans: Fira Code, monospace;
+    --font-mono: Fira Code, monospace;
+
+    --base-font-size: 16px;
+    --line-height: 1.6;
+
+    --h1-size: clamp(1.6rem, 2.5vw + 1rem, 2rem);
+    --h2-size: clamp(1.35rem, 2vw + 0.9rem, 1.6rem);
+    --h3-size: clamp(1.15rem, 1.5vw + 0.8rem, 1.3rem);
+    --h4-size: 1.05rem;
+    --h5-size: 1rem;
+
+    --content-max: 44rem;
+
+    --space-sm: 0.5rem;
+    --space-md: 0.75rem;
+    --space-lg: 1rem;
+
+    --img-width: 256px;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: auto;
+    padding-right: var(--space-lg);
+    padding-left: var(--space-lg);
+    max-width: var(--content-max);
+    border-left: 1px solid var(--md-border);
+    border-right: 1px solid var(--md-border);
+    background: var(--md-surface);
+    color: var(--md-on-surface);
+    font-family: var(--font-sans);
+    font-size: var(--base-font-size);
+    line-height: var(--line-height);
+  }
+
+  pre {
+    border: 1px solid var(--md-border);
+    background-color: var(--md-code-bg);
+    color: var(--md-code-fg);
+    padding: var(--space-sm);
+    overflow: auto;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.95em;
+  }
+
+  h1 a,
+  h2 a,
+  h3 a,
+  h4 a,
+  h5 a {
+    text-decoration: none;
+    color: var(--md-primary);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    border-bottom: 1px dotted var(--md-border);
+    color: var(--md-primary);
+    margin-top: 1.2em;
+    margin-bottom: 0.4em;
+  }
+
+  h1 {
+    font-size: var(--h1-size);
+  }
+  h2 {
+    font-size: var(--h2-size);
+  }
+  h3 {
+    font-size: var(--h3-size);
+  }
+  h4 {
+    font-size: var(--h4-size);
+    font-style: italic;
+  }
+  h5 {
+    font-size: var(--h5-size);
+    font-style: italic;
+  }
+
+  h1.title {
+    font-size: clamp(2rem, 3vw + 1.2rem, 2.5rem);
+    font-weight: 800;
+    padding-top: var(--space-sm);
+    padding-bottom: var(--space-sm);
+    text-align: left;
+    border: none;
+    color: var(--md-primary);
+  }
+
+  dt code {
+    font-weight: 700;
+  }
+
+  dd p {
+    margin-top: 0;
+  }
+
+  #footer {
+    padding-top: var(--space-lg);
+    font-size: 0.8rem;
+    color: var(--md-muted);
+    text-align: center;
+  }
+
+  /* Tables: allow horizontal scroll on overflow without changing HTML */
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-collapse: collapse;
+    margin-bottom: 3rem;
+  }
+  thead,
+  tbody,
+  tfoot,
+  tr {
+    width: 100%;
+  }
+  th,
+  td {
+    border: 1px solid var(--md-border);
+    padding: var(--space-sm) var(--space-md);
+    white-space: nowrap; /* prevents squishing; enables horizontal scroll */
+  }
+
+  /* Images: ensure line break before and fixed width */
+  img {
+    display: block; /* forces a line break before/after */
+    width: var(--img-width);
+    height: auto;
+    margin-top: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  img:hover { transform: scale(3); }
+  img { transition: transform 200ms cubic-bezier(0, 0, 0, 1); }
+
+
+  a {
+    color: var(--md-primary);
+  }
+  a:hover,
+  a:focus {
+    color: var(--md-primary-variant);
+    text-decoration: underline;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0.8em;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.4em;
+    margin-top: 0.4em;
+    margin-bottom: 0.8em;
+  }
+
+  blockquote {
+    margin: 0.8em 0;
+    padding: var(--space-md) var(--space-lg);
+    border-left: 3px solid var(--md-primary);
+    background: #f8fffe;
+    color: var(--md-on-surface);
+  }
+
+  p code,
+  li code,
+  h1 code,
+  h2 code,
+  h3 code,
+  h4 code,
+  h5 code {
+    background: var(--md-code-bg);
+    color: var(--md-code-fg);
+    padding: 0 0.25em;
+    border-radius: 3px;
+  }
+
+  dl {
+    margin: 0.8em 0;
+  }
+  dt {
+    margin-top: 0.6em;
+    color: var(--md-muted);
+  }
+  dd {
+    margin-left: 1em;
+  }
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Evaluation Report</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#evaluation" id="toc-evaluation">Evaluation</a>
+<ul>
+<li><a href="#tables" id="toc-tables">Tables</a></li>
+</ul></li>
+<li><a href="#timing-results" id="toc-timing-results">Timing Results</a>
+<ul>
+<li><a href="#tables-1" id="toc-tables-1">Tables</a></li>
+<li><a href="#stats" id="toc-stats">Stats</a></li>
+<li><a href="#plots" id="toc-plots">Plots</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="evaluation">Evaluation</h1>
+<ul>
+<li>Project: <a href="https://gitlab.freedesktop.org/mateosss/basalt"
+class="uri">https://gitlab.freedesktop.org/mateosss/basalt</a></li>
+<li>Deterministic: 1</li>
+<li>Num threads: 4</li>
+<li>Evaluation sets: euroc,tumvi,msd</li>
+<li>Branch: tsantucci/loop-closure</li>
+<li>Commit: 7304d5da</li>
+<li>Commit URL: <a
+href="https://gitlab.freedesktop.org/mateosss/basalt/-/commit/7304d5dab1f6be79845fed278bc33d47cd4a1ae5"
+class="uri">https://gitlab.freedesktop.org/mateosss/basalt/-/commit/7304d5dab1f6be79845fed278bc33d47cd4a1ae5</a></li>
+<li>Pipeline: 1739574</li>
+<li>Pipeline URL: <a
+href="https://gitlab.freedesktop.org/mateosss/basalt/-/pipelines/1739574"
+class="uri">https://gitlab.freedesktop.org/mateosss/basalt/-/pipelines/1739574</a></li>
+<li>Job: 109413873</li>
+<li>Job URL: <a
+href="https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/109413873"
+class="uri">https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/109413873</a></li>
+<li>CPU: 13th Gen Intel(R) Core(TM) i5-13600</li>
+<li>RAM: 33GB</li>
+</ul>
+<h2 id="tables">Tables</h2>
+<p>[93mInitialized new /root/.evo/settings.json[39m Evaluating metrics:
+atec, rtec, timing, memory</p>
+<p>Average (± stdev) pose estimation time [ms]</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">7304d5da-1</th>
+<th style="text-align: left;">7304d5da-ba-1</th>
+<th style="text-align: left;">7304d5da-bapg-1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">EMH01</td>
+<td style="text-align: left;"><strong>18.26 ± 7.49</strong></td>
+<td style="text-align: left;">18.26 ± 7.49</td>
+<td style="text-align: left;">18.26 ± 7.49</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EMH02</td>
+<td style="text-align: left;"><strong>18.93 ± 6.95</strong></td>
+<td style="text-align: left;">18.93 ± 6.95</td>
+<td style="text-align: left;">18.93 ± 6.95</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EMH03</td>
+<td style="text-align: left;"><strong>19.10 ± 7.36</strong></td>
+<td style="text-align: left;">19.10 ± 7.36</td>
+<td style="text-align: left;">19.10 ± 7.36</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EMH04</td>
+<td style="text-align: left;"><strong>16.48 ± 4.43</strong></td>
+<td style="text-align: left;">16.48 ± 4.43</td>
+<td style="text-align: left;">16.48 ± 4.43</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EMH05</td>
+<td style="text-align: left;"><strong>17.52 ± 6.23</strong></td>
+<td style="text-align: left;">17.52 ± 6.23</td>
+<td style="text-align: left;">17.52 ± 6.23</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV101</td>
+<td style="text-align: left;"><strong>12.56 ± 5.88</strong></td>
+<td style="text-align: left;">12.56 ± 5.88</td>
+<td style="text-align: left;">12.56 ± 5.88</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV102</td>
+<td style="text-align: left;"><strong>13.31 ± 3.81</strong></td>
+<td style="text-align: left;">13.31 ± 3.81</td>
+<td style="text-align: left;">13.31 ± 3.81</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV103</td>
+<td style="text-align: left;"><strong>15.55 ± 6.75</strong></td>
+<td style="text-align: left;">15.55 ± 6.75</td>
+<td style="text-align: left;">15.55 ± 6.75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV201</td>
+<td style="text-align: left;"><strong>17.25 ± 6.96</strong></td>
+<td style="text-align: left;">17.25 ± 6.96</td>
+<td style="text-align: left;">17.25 ± 6.96</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV202</td>
+<td style="text-align: left;"><strong>15.29 ± 7.17</strong></td>
+<td style="text-align: left;">15.29 ± 7.17</td>
+<td style="text-align: left;">15.29 ± 7.17</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV203</td>
+<td style="text-align: left;"><strong>14.27 ± 6.53</strong></td>
+<td style="text-align: left;">14.27 ± 6.53</td>
+<td style="text-align: left;">14.27 ± 6.53</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO01</td>
+<td style="text-align: left;"><strong>23.99 ± 3.87</strong></td>
+<td style="text-align: left;">23.99 ± 3.87</td>
+<td style="text-align: left;">23.99 ± 3.87</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO02</td>
+<td style="text-align: left;"><strong>23.16 ± 5.03</strong></td>
+<td style="text-align: left;">23.16 ± 5.03</td>
+<td style="text-align: left;">23.16 ± 5.03</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO03</td>
+<td style="text-align: left;"><strong>21.61 ± 5.31</strong></td>
+<td style="text-align: left;">21.61 ± 5.31</td>
+<td style="text-align: left;">21.61 ± 5.31</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO04</td>
+<td style="text-align: left;"><strong>21.25 ± 4.90</strong></td>
+<td style="text-align: left;">21.25 ± 4.90</td>
+<td style="text-align: left;">21.25 ± 4.90</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO05</td>
+<td style="text-align: left;"><strong>19.90 ± 5.27</strong></td>
+<td style="text-align: left;">19.90 ± 5.27</td>
+<td style="text-align: left;">19.90 ± 5.27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO06</td>
+<td style="text-align: left;"><strong>20.23 ± 5.57</strong></td>
+<td style="text-align: left;">20.23 ± 5.57</td>
+<td style="text-align: left;">20.23 ± 5.57</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO07</td>
+<td style="text-align: left;"><strong>22.22 ± 6.60</strong></td>
+<td style="text-align: left;">22.22 ± 6.60</td>
+<td style="text-align: left;">22.22 ± 6.60</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO08</td>
+<td style="text-align: left;"><strong>22.43 ± 3.73</strong></td>
+<td style="text-align: left;">22.43 ± 3.73</td>
+<td style="text-align: left;">22.43 ± 3.73</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO09</td>
+<td style="text-align: left;"><strong>20.35 ± 3.08</strong></td>
+<td style="text-align: left;">20.35 ± 3.08</td>
+<td style="text-align: left;">20.35 ± 3.08</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO10</td>
+<td style="text-align: left;"><strong>16.84 ± 4.55</strong></td>
+<td style="text-align: left;">16.84 ± 4.55</td>
+<td style="text-align: left;">16.84 ± 4.55</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO11</td>
+<td style="text-align: left;"><strong>16.78 ± 6.10</strong></td>
+<td style="text-align: left;">16.78 ± 6.10</td>
+<td style="text-align: left;">16.78 ± 6.10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO12</td>
+<td style="text-align: left;"><strong>19.92 ± 5.48</strong></td>
+<td style="text-align: left;">19.92 ± 5.48</td>
+<td style="text-align: left;">19.92 ± 5.48</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO13</td>
+<td style="text-align: left;"><strong>21.54 ± 4.39</strong></td>
+<td style="text-align: left;">21.54 ± 4.39</td>
+<td style="text-align: left;">21.54 ± 4.39</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO14</td>
+<td style="text-align: left;"><strong>22.00 ± 3.76</strong></td>
+<td style="text-align: left;">22.00 ± 3.76</td>
+<td style="text-align: left;">22.00 ± 3.76</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO15</td>
+<td style="text-align: left;"><strong>19.72 ± 4.82</strong></td>
+<td style="text-align: left;">19.72 ± 4.82</td>
+<td style="text-align: left;">19.72 ± 4.82</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO01</td>
+<td style="text-align: left;"><strong>23.34 ± 4.53</strong></td>
+<td style="text-align: left;">23.34 ± 4.53</td>
+<td style="text-align: left;">23.34 ± 4.53</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO02</td>
+<td style="text-align: left;"><strong>23.77 ± 3.54</strong></td>
+<td style="text-align: left;">23.77 ± 3.54</td>
+<td style="text-align: left;">23.77 ± 3.54</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO03</td>
+<td style="text-align: left;"><strong>23.78 ± 6.58</strong></td>
+<td style="text-align: left;">23.78 ± 6.58</td>
+<td style="text-align: left;">23.78 ± 6.58</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO04</td>
+<td style="text-align: left;"><strong>22.06 ± 6.15</strong></td>
+<td style="text-align: left;">22.06 ± 6.15</td>
+<td style="text-align: left;">22.06 ± 6.15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO05</td>
+<td style="text-align: left;"><strong>20.64 ± 5.04</strong></td>
+<td style="text-align: left;">20.64 ± 5.04</td>
+<td style="text-align: left;">20.64 ± 5.04</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO06</td>
+<td style="text-align: left;"><strong>21.25 ± 4.92</strong></td>
+<td style="text-align: left;">21.25 ± 4.92</td>
+<td style="text-align: left;">21.25 ± 4.92</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO07</td>
+<td style="text-align: left;"><strong>22.31 ± 6.50</strong></td>
+<td style="text-align: left;">22.31 ± 6.50</td>
+<td style="text-align: left;">22.31 ± 6.50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO08</td>
+<td style="text-align: left;"><strong>21.32 ± 5.77</strong></td>
+<td style="text-align: left;">21.32 ± 5.77</td>
+<td style="text-align: left;">21.32 ± 5.77</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO09</td>
+<td style="text-align: left;"><strong>18.65 ± 3.06</strong></td>
+<td style="text-align: left;">18.65 ± 3.06</td>
+<td style="text-align: left;">18.65 ± 3.06</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO10</td>
+<td style="text-align: left;"><strong>17.22 ± 2.14</strong></td>
+<td style="text-align: left;">17.22 ± 2.14</td>
+<td style="text-align: left;">17.22 ± 2.14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO11</td>
+<td style="text-align: left;"><strong>17.43 ± 3.68</strong></td>
+<td style="text-align: left;">17.43 ± 3.68</td>
+<td style="text-align: left;">17.43 ± 3.68</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO12</td>
+<td style="text-align: left;"><strong>25.43 ± 5.24</strong></td>
+<td style="text-align: left;">25.43 ± 5.24</td>
+<td style="text-align: left;">25.43 ± 5.24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO13</td>
+<td style="text-align: left;"><strong>24.60 ± 4.86</strong></td>
+<td style="text-align: left;">24.60 ± 4.86</td>
+<td style="text-align: left;">24.60 ± 4.86</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO14</td>
+<td style="text-align: left;"><strong>22.69 ± 4.99</strong></td>
+<td style="text-align: left;">22.69 ± 4.99</td>
+<td style="text-align: left;">22.69 ± 4.99</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO15</td>
+<td style="text-align: left;"><strong>23.51 ± 3.81</strong></td>
+<td style="text-align: left;">23.51 ± 3.81</td>
+<td style="text-align: left;">23.51 ± 3.81</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO16</td>
+<td style="text-align: left;"><strong>23.33 ± 6.13</strong></td>
+<td style="text-align: left;">23.33 ± 6.13</td>
+<td style="text-align: left;">23.33 ± 6.13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB01</td>
+<td style="text-align: left;"><strong>24.53 ± 5.65</strong></td>
+<td style="text-align: left;">24.53 ± 5.65</td>
+<td style="text-align: left;">24.53 ± 5.65</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB02</td>
+<td style="text-align: left;"><strong>23.86 ± 5.20</strong></td>
+<td style="text-align: left;">23.86 ± 5.20</td>
+<td style="text-align: left;">23.86 ± 5.20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB03</td>
+<td style="text-align: left;"><strong>26.98 ± 11.31</strong></td>
+<td style="text-align: left;">26.98 ± 11.31</td>
+<td style="text-align: left;">26.98 ± 11.31</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB04</td>
+<td style="text-align: left;"><strong>26.13 ± 11.83</strong></td>
+<td style="text-align: left;">26.13 ± 11.83</td>
+<td style="text-align: left;">26.13 ± 11.83</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB05</td>
+<td style="text-align: left;"><strong>26.19 ± 10.01</strong></td>
+<td style="text-align: left;">26.19 ± 10.01</td>
+<td style="text-align: left;">26.19 ± 10.01</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB06</td>
+<td style="text-align: left;"><strong>25.78 ± 9.39</strong></td>
+<td style="text-align: left;">25.78 ± 9.39</td>
+<td style="text-align: left;">25.78 ± 9.39</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB07</td>
+<td style="text-align: left;"><strong>25.19 ± 9.45</strong></td>
+<td style="text-align: left;">25.19 ± 9.45</td>
+<td style="text-align: left;">25.19 ± 9.45</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB08</td>
+<td style="text-align: left;"><strong>18.07 ± 7.17</strong></td>
+<td style="text-align: left;">18.07 ± 7.17</td>
+<td style="text-align: left;">18.07 ± 7.17</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP01</td>
+<td style="text-align: left;"><strong>23.54 ± 5.75</strong></td>
+<td style="text-align: left;">23.54 ± 5.75</td>
+<td style="text-align: left;">23.54 ± 5.75</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP02</td>
+<td style="text-align: left;"><strong>24.75 ± 6.13</strong></td>
+<td style="text-align: left;">24.75 ± 6.13</td>
+<td style="text-align: left;">24.75 ± 6.13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP03</td>
+<td style="text-align: left;"><strong>24.30 ± 6.41</strong></td>
+<td style="text-align: left;">24.30 ± 6.41</td>
+<td style="text-align: left;">24.30 ± 6.41</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP04</td>
+<td style="text-align: left;"><strong>22.57 ± 4.79</strong></td>
+<td style="text-align: left;">22.57 ± 4.79</td>
+<td style="text-align: left;">22.57 ± 4.79</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP05</td>
+<td style="text-align: left;"><strong>22.34 ± 4.64</strong></td>
+<td style="text-align: left;">22.34 ± 4.64</td>
+<td style="text-align: left;">22.34 ± 4.64</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP06</td>
+<td style="text-align: left;"><strong>23.29 ± 4.35</strong></td>
+<td style="text-align: left;">23.29 ± 4.35</td>
+<td style="text-align: left;">23.29 ± 4.35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPT01</td>
+<td style="text-align: left;"><strong>25.32 ± 5.28</strong></td>
+<td style="text-align: left;">25.32 ± 5.28</td>
+<td style="text-align: left;">25.32 ± 5.28</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPT02</td>
+<td style="text-align: left;"><strong>22.84 ± 5.44</strong></td>
+<td style="text-align: left;">22.84 ± 5.44</td>
+<td style="text-align: left;">22.84 ± 5.44</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPT03</td>
+<td style="text-align: left;"><strong>21.58 ± 5.91</strong></td>
+<td style="text-align: left;">21.58 ± 5.91</td>
+<td style="text-align: left;">21.58 ± 5.91</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO01</td>
+<td style="text-align: left;"><strong>17.36 ± 9.36</strong></td>
+<td style="text-align: left;">17.36 ± 9.36</td>
+<td style="text-align: left;">17.36 ± 9.36</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO02</td>
+<td style="text-align: left;"><strong>12.91 ± 4.46</strong></td>
+<td style="text-align: left;">12.91 ± 4.46</td>
+<td style="text-align: left;">12.91 ± 4.46</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO03</td>
+<td style="text-align: left;"><strong>13.31 ± 4.77</strong></td>
+<td style="text-align: left;">13.31 ± 4.77</td>
+<td style="text-align: left;">13.31 ± 4.77</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO04</td>
+<td style="text-align: left;"><strong>10.84 ± 4.36</strong></td>
+<td style="text-align: left;">10.84 ± 4.36</td>
+<td style="text-align: left;">10.84 ± 4.36</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO05</td>
+<td style="text-align: left;"><strong>10.78 ± 2.83</strong></td>
+<td style="text-align: left;">10.78 ± 2.83</td>
+<td style="text-align: left;">10.78 ± 2.83</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO06</td>
+<td style="text-align: left;"><strong>10.63 ± 4.57</strong></td>
+<td style="text-align: left;">10.63 ± 4.57</td>
+<td style="text-align: left;">10.63 ± 4.57</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO07</td>
+<td style="text-align: left;"><strong>12.05 ± 2.44</strong></td>
+<td style="text-align: left;">12.05 ± 2.44</td>
+<td style="text-align: left;">12.05 ± 2.44</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO08</td>
+<td style="text-align: left;"><strong>9.31 ± 2.45</strong></td>
+<td style="text-align: left;">9.31 ± 2.45</td>
+<td style="text-align: left;">9.31 ± 2.45</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO09</td>
+<td style="text-align: left;"><strong>17.38 ± 7.69</strong></td>
+<td style="text-align: left;">17.38 ± 7.69</td>
+<td style="text-align: left;">17.38 ± 7.69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO10</td>
+<td style="text-align: left;"><strong>7.73 ± 2.86</strong></td>
+<td style="text-align: left;">7.73 ± 2.86</td>
+<td style="text-align: left;">7.73 ± 2.86</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO11</td>
+<td style="text-align: left;"><strong>7.53 ± 1.26</strong></td>
+<td style="text-align: left;">7.53 ± 1.26</td>
+<td style="text-align: left;">7.53 ± 1.26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO12</td>
+<td style="text-align: left;"><strong>11.86 ± 3.64</strong></td>
+<td style="text-align: left;">11.86 ± 3.64</td>
+<td style="text-align: left;">11.86 ± 3.64</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO13</td>
+<td style="text-align: left;"><strong>11.24 ± 2.72</strong></td>
+<td style="text-align: left;">11.24 ± 2.72</td>
+<td style="text-align: left;">11.24 ± 2.72</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO14</td>
+<td style="text-align: left;"><strong>12.77 ± 2.92</strong></td>
+<td style="text-align: left;">12.77 ± 2.92</td>
+<td style="text-align: left;">12.77 ± 2.92</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO15</td>
+<td style="text-align: left;"><strong>13.21 ± 3.75</strong></td>
+<td style="text-align: left;">13.21 ± 3.75</td>
+<td style="text-align: left;">13.21 ± 3.75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO16</td>
+<td style="text-align: left;"><strong>11.54 ± 3.25</strong></td>
+<td style="text-align: left;">11.54 ± 3.25</td>
+<td style="text-align: left;">11.54 ± 3.25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC1</td>
+<td style="text-align: left;"><strong>13.21 ± 4.36</strong></td>
+<td style="text-align: left;">13.21 ± 4.36</td>
+<td style="text-align: left;">13.21 ± 4.36</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TC2</td>
+<td style="text-align: left;"><strong>15.77 ± 6.71</strong></td>
+<td style="text-align: left;">15.77 ± 6.71</td>
+<td style="text-align: left;">15.77 ± 6.71</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC3</td>
+<td style="text-align: left;"><strong>15.39 ± 5.93</strong></td>
+<td style="text-align: left;">15.39 ± 5.93</td>
+<td style="text-align: left;">15.39 ± 5.93</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TC4</td>
+<td style="text-align: left;"><strong>13.23 ± 2.62</strong></td>
+<td style="text-align: left;">13.23 ± 2.62</td>
+<td style="text-align: left;">13.23 ± 2.62</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC5</td>
+<td style="text-align: left;"><strong>22.61 ± 8.04</strong></td>
+<td style="text-align: left;">22.61 ± 8.04</td>
+<td style="text-align: left;">22.61 ± 8.04</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM1</td>
+<td style="text-align: left;"><strong>24.59 ± 10.85</strong></td>
+<td style="text-align: left;">24.59 ± 10.85</td>
+<td style="text-align: left;">24.59 ± 10.85</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM2</td>
+<td style="text-align: left;"><strong>22.83 ± 8.89</strong></td>
+<td style="text-align: left;">22.83 ± 8.89</td>
+<td style="text-align: left;">22.83 ± 8.89</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM3</td>
+<td style="text-align: left;"><strong>18.59 ± 6.66</strong></td>
+<td style="text-align: left;">18.59 ± 6.66</td>
+<td style="text-align: left;">18.59 ± 6.66</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM4</td>
+<td style="text-align: left;"><strong>24.42 ± 13.79</strong></td>
+<td style="text-align: left;">24.42 ± 13.79</td>
+<td style="text-align: left;">24.42 ± 13.79</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM5</td>
+<td style="text-align: left;"><strong>28.70 ± 15.88</strong></td>
+<td style="text-align: left;">28.70 ± 15.88</td>
+<td style="text-align: left;">28.70 ± 15.88</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM6</td>
+<td style="text-align: left;"><strong>24.66 ± 15.44</strong></td>
+<td style="text-align: left;">24.66 ± 15.44</td>
+<td style="text-align: left;">24.66 ± 15.44</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO1</td>
+<td style="text-align: left;"><strong>36.19 ± 25.99</strong></td>
+<td style="text-align: left;">36.19 ± 25.99</td>
+<td style="text-align: left;">36.19 ± 25.99</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO2</td>
+<td style="text-align: left;"><strong>26.97 ± 13.99</strong></td>
+<td style="text-align: left;">26.97 ± 13.99</td>
+<td style="text-align: left;">26.97 ± 13.99</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO3</td>
+<td style="text-align: left;"><strong>27.95 ± 12.94</strong></td>
+<td style="text-align: left;">27.95 ± 12.94</td>
+<td style="text-align: left;">27.95 ± 12.94</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO4</td>
+<td style="text-align: left;"><strong>23.25 ± 10.73</strong></td>
+<td style="text-align: left;">23.25 ± 10.73</td>
+<td style="text-align: left;">23.25 ± 10.73</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO5</td>
+<td style="text-align: left;"><strong>33.61 ± 20.20</strong></td>
+<td style="text-align: left;">33.61 ± 20.20</td>
+<td style="text-align: left;">33.61 ± 20.20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO6</td>
+<td style="text-align: left;"><strong>32.24 ± 18.78</strong></td>
+<td style="text-align: left;">32.24 ± 18.78</td>
+<td style="text-align: left;">32.24 ± 18.78</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO7</td>
+<td style="text-align: left;"><strong>26.75 ± 15.17</strong></td>
+<td style="text-align: left;">26.75 ± 15.17</td>
+<td style="text-align: left;">26.75 ± 15.17</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO8</td>
+<td style="text-align: left;"><strong>23.21 ± 14.50</strong></td>
+<td style="text-align: left;">23.21 ± 14.50</td>
+<td style="text-align: left;">23.21 ± 14.50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR1</td>
+<td style="text-align: left;"><strong>17.01 ± 3.84</strong></td>
+<td style="text-align: left;">17.01 ± 3.84</td>
+<td style="text-align: left;">17.01 ± 3.84</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR2</td>
+<td style="text-align: left;"><strong>16.85 ± 4.65</strong></td>
+<td style="text-align: left;">16.85 ± 4.65</td>
+<td style="text-align: left;">16.85 ± 4.65</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR3</td>
+<td style="text-align: left;"><strong>15.84 ± 3.31</strong></td>
+<td style="text-align: left;">15.84 ± 3.31</td>
+<td style="text-align: left;">15.84 ± 3.31</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR4</td>
+<td style="text-align: left;"><strong>22.24 ± 8.77</strong></td>
+<td style="text-align: left;">22.24 ± 8.77</td>
+<td style="text-align: left;">22.24 ± 8.77</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR5</td>
+<td style="text-align: left;"><strong>32.13 ± 9.99</strong></td>
+<td style="text-align: left;">32.13 ± 9.99</td>
+<td style="text-align: left;">32.13 ± 9.99</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR6</td>
+<td style="text-align: left;"><strong>36.47 ± 11.74</strong></td>
+<td style="text-align: left;">36.47 ± 11.74</td>
+<td style="text-align: left;">36.47 ± 11.74</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TS1</td>
+<td style="text-align: left;"><strong>39.80 ± 15.83</strong></td>
+<td style="text-align: left;">39.80 ± 15.83</td>
+<td style="text-align: left;">39.80 ± 15.83</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TS2</td>
+<td style="text-align: left;"><strong>37.95 ± 15.10</strong></td>
+<td style="text-align: left;">37.95 ± 15.10</td>
+<td style="text-align: left;">37.95 ± 15.10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TS3</td>
+<td style="text-align: left;"><strong>22.24 ± 13.85</strong></td>
+<td style="text-align: left;">22.24 ± 13.85</td>
+<td style="text-align: left;">22.24 ± 13.85</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">[AVG]</td>
+<td style="text-align: left;"><strong>20.72 ± 6.99</strong></td>
+<td style="text-align: left;">20.72 ± 6.99</td>
+<td style="text-align: left;">20.72 ± 6.99</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">[MED]</td>
+<td style="text-align: left;"><strong>21.58 ± 5.65</strong></td>
+<td style="text-align: left;">21.58 ± 5.65</td>
+<td style="text-align: left;">21.58 ± 5.65</td>
+</tr>
+</tbody>
+</table>
+<p>Peak memory usage [MB]</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">7304d5da-1</th>
+<th style="text-align: right;">7304d5da-ba-1</th>
+<th style="text-align: right;">7304d5da-bapg-1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">EMH01</td>
+<td style="text-align: left;"><strong>1095.7</strong></td>
+<td style="text-align: right;">1095.7</td>
+<td style="text-align: right;">1095.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EMH02</td>
+<td style="text-align: left;"><strong>1077.7</strong></td>
+<td style="text-align: right;">1077.7</td>
+<td style="text-align: right;">1077.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EMH03</td>
+<td style="text-align: left;"><strong>1095.1</strong></td>
+<td style="text-align: right;">1095.1</td>
+<td style="text-align: right;">1095.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EMH04</td>
+<td style="text-align: left;"><strong>1094.9</strong></td>
+<td style="text-align: right;">1094.9</td>
+<td style="text-align: right;">1094.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EMH05</td>
+<td style="text-align: left;"><strong>1094.3</strong></td>
+<td style="text-align: right;">1094.3</td>
+<td style="text-align: right;">1094.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV101</td>
+<td style="text-align: left;"><strong>1095.1</strong></td>
+<td style="text-align: right;">1095.1</td>
+<td style="text-align: right;">1095.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV102</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV103</td>
+<td style="text-align: left;"><strong>1095.0</strong></td>
+<td style="text-align: right;">1095</td>
+<td style="text-align: right;">1095</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV201</td>
+<td style="text-align: left;"><strong>1094.5</strong></td>
+<td style="text-align: right;">1094.5</td>
+<td style="text-align: right;">1094.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV202</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV203</td>
+<td style="text-align: left;"><strong>1094.7</strong></td>
+<td style="text-align: right;">1094.7</td>
+<td style="text-align: right;">1094.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO01</td>
+<td style="text-align: left;"><strong>1095.1</strong></td>
+<td style="text-align: right;">1095.1</td>
+<td style="text-align: right;">1095.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO02</td>
+<td style="text-align: left;"><strong>1070.2</strong></td>
+<td style="text-align: right;">1070.2</td>
+<td style="text-align: right;">1070.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO03</td>
+<td style="text-align: left;"><strong>1074.9</strong></td>
+<td style="text-align: right;">1074.9</td>
+<td style="text-align: right;">1074.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO04</td>
+<td style="text-align: left;"><strong>1094.8</strong></td>
+<td style="text-align: right;">1094.8</td>
+<td style="text-align: right;">1094.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO05</td>
+<td style="text-align: left;"><strong>1094.5</strong></td>
+<td style="text-align: right;">1094.5</td>
+<td style="text-align: right;">1094.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO06</td>
+<td style="text-align: left;"><strong>1094.5</strong></td>
+<td style="text-align: right;">1094.5</td>
+<td style="text-align: right;">1094.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO07</td>
+<td style="text-align: left;"><strong>1094.5</strong></td>
+<td style="text-align: right;">1094.5</td>
+<td style="text-align: right;">1094.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO08</td>
+<td style="text-align: left;"><strong>1095.1</strong></td>
+<td style="text-align: right;">1095.1</td>
+<td style="text-align: right;">1095.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO09</td>
+<td style="text-align: left;"><strong>1094.9</strong></td>
+<td style="text-align: right;">1094.9</td>
+<td style="text-align: right;">1094.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO10</td>
+<td style="text-align: left;"><strong>1075.6</strong></td>
+<td style="text-align: right;">1075.6</td>
+<td style="text-align: right;">1075.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO11</td>
+<td style="text-align: left;"><strong>1094.7</strong></td>
+<td style="text-align: right;">1094.7</td>
+<td style="text-align: right;">1094.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO12</td>
+<td style="text-align: left;"><strong>1094.8</strong></td>
+<td style="text-align: right;">1094.8</td>
+<td style="text-align: right;">1094.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO13</td>
+<td style="text-align: left;"><strong>1094.3</strong></td>
+<td style="text-align: right;">1094.3</td>
+<td style="text-align: right;">1094.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO14</td>
+<td style="text-align: left;"><strong>1095.4</strong></td>
+<td style="text-align: right;">1095.4</td>
+<td style="text-align: right;">1095.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO15</td>
+<td style="text-align: left;"><strong>1094.8</strong></td>
+<td style="text-align: right;">1094.8</td>
+<td style="text-align: right;">1094.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO01</td>
+<td style="text-align: left;"><strong>1094.5</strong></td>
+<td style="text-align: right;">1094.5</td>
+<td style="text-align: right;">1094.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO02</td>
+<td style="text-align: left;"><strong>1086.1</strong></td>
+<td style="text-align: right;">1086.1</td>
+<td style="text-align: right;">1086.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO03</td>
+<td style="text-align: left;"><strong>1079.8</strong></td>
+<td style="text-align: right;">1079.8</td>
+<td style="text-align: right;">1079.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO04</td>
+<td style="text-align: left;"><strong>1070.0</strong></td>
+<td style="text-align: right;">1070</td>
+<td style="text-align: right;">1070</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO05</td>
+<td style="text-align: left;"><strong>1094.9</strong></td>
+<td style="text-align: right;">1094.9</td>
+<td style="text-align: right;">1094.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO06</td>
+<td style="text-align: left;"><strong>1094.5</strong></td>
+<td style="text-align: right;">1094.5</td>
+<td style="text-align: right;">1094.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO07</td>
+<td style="text-align: left;"><strong>1083.1</strong></td>
+<td style="text-align: right;">1083.1</td>
+<td style="text-align: right;">1083.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO08</td>
+<td style="text-align: left;"><strong>1095.1</strong></td>
+<td style="text-align: right;">1095.1</td>
+<td style="text-align: right;">1095.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO09</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO10</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO11</td>
+<td style="text-align: left;"><strong>1094.8</strong></td>
+<td style="text-align: right;">1094.8</td>
+<td style="text-align: right;">1094.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO12</td>
+<td style="text-align: left;"><strong>1095.1</strong></td>
+<td style="text-align: right;">1095.1</td>
+<td style="text-align: right;">1095.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO13</td>
+<td style="text-align: left;"><strong>1094.4</strong></td>
+<td style="text-align: right;">1094.4</td>
+<td style="text-align: right;">1094.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO14</td>
+<td style="text-align: left;"><strong>1089.6</strong></td>
+<td style="text-align: right;">1089.6</td>
+<td style="text-align: right;">1089.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO15</td>
+<td style="text-align: left;"><strong>1094.8</strong></td>
+<td style="text-align: right;">1094.8</td>
+<td style="text-align: right;">1094.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO16</td>
+<td style="text-align: left;"><strong>1074.4</strong></td>
+<td style="text-align: right;">1074.4</td>
+<td style="text-align: right;">1074.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB01</td>
+<td style="text-align: left;"><strong>1071.9</strong></td>
+<td style="text-align: right;">1071.9</td>
+<td style="text-align: right;">1071.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB02</td>
+<td style="text-align: left;"><strong>1095.3</strong></td>
+<td style="text-align: right;">1095.3</td>
+<td style="text-align: right;">1095.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB03</td>
+<td style="text-align: left;"><strong>1094.5</strong></td>
+<td style="text-align: right;">1094.5</td>
+<td style="text-align: right;">1094.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB04</td>
+<td style="text-align: left;"><strong>1078.8</strong></td>
+<td style="text-align: right;">1078.8</td>
+<td style="text-align: right;">1078.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB05</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB06</td>
+<td style="text-align: left;"><strong>1095.0</strong></td>
+<td style="text-align: right;">1095</td>
+<td style="text-align: right;">1095</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB07</td>
+<td style="text-align: left;"><strong>1091.8</strong></td>
+<td style="text-align: right;">1091.8</td>
+<td style="text-align: right;">1091.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB08</td>
+<td style="text-align: left;"><strong>1248.4</strong></td>
+<td style="text-align: right;">1248.4</td>
+<td style="text-align: right;">1248.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP01</td>
+<td style="text-align: left;"><strong>1094.8</strong></td>
+<td style="text-align: right;">1094.8</td>
+<td style="text-align: right;">1094.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP02</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP03</td>
+<td style="text-align: left;"><strong>1094.7</strong></td>
+<td style="text-align: right;">1094.7</td>
+<td style="text-align: right;">1094.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP04</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP05</td>
+<td style="text-align: left;"><strong>1094.4</strong></td>
+<td style="text-align: right;">1094.4</td>
+<td style="text-align: right;">1094.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP06</td>
+<td style="text-align: left;"><strong>1094.3</strong></td>
+<td style="text-align: right;">1094.3</td>
+<td style="text-align: right;">1094.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPT01</td>
+<td style="text-align: left;"><strong>1094.5</strong></td>
+<td style="text-align: right;">1094.5</td>
+<td style="text-align: right;">1094.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPT02</td>
+<td style="text-align: left;"><strong>1063.4</strong></td>
+<td style="text-align: right;">1063.4</td>
+<td style="text-align: right;">1063.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPT03</td>
+<td style="text-align: left;"><strong>1094.1</strong></td>
+<td style="text-align: right;">1094.1</td>
+<td style="text-align: right;">1094.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO01</td>
+<td style="text-align: left;"><strong>1094.7</strong></td>
+<td style="text-align: right;">1094.7</td>
+<td style="text-align: right;">1094.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO02</td>
+<td style="text-align: left;"><strong>1095.0</strong></td>
+<td style="text-align: right;">1095</td>
+<td style="text-align: right;">1095</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO03</td>
+<td style="text-align: left;"><strong>1094.8</strong></td>
+<td style="text-align: right;">1094.8</td>
+<td style="text-align: right;">1094.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO04</td>
+<td style="text-align: left;"><strong>1094.9</strong></td>
+<td style="text-align: right;">1094.9</td>
+<td style="text-align: right;">1094.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO05</td>
+<td style="text-align: left;"><strong>1094.2</strong></td>
+<td style="text-align: right;">1094.2</td>
+<td style="text-align: right;">1094.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO06</td>
+<td style="text-align: left;"><strong>1081.2</strong></td>
+<td style="text-align: right;">1081.2</td>
+<td style="text-align: right;">1081.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO07</td>
+<td style="text-align: left;"><strong>1073.8</strong></td>
+<td style="text-align: right;">1073.8</td>
+<td style="text-align: right;">1073.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO08</td>
+<td style="text-align: left;"><strong>1094.4</strong></td>
+<td style="text-align: right;">1094.4</td>
+<td style="text-align: right;">1094.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO09</td>
+<td style="text-align: left;"><strong>1094.3</strong></td>
+<td style="text-align: right;">1094.3</td>
+<td style="text-align: right;">1094.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO10</td>
+<td style="text-align: left;"><strong>1095.0</strong></td>
+<td style="text-align: right;">1095</td>
+<td style="text-align: right;">1095</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO11</td>
+<td style="text-align: left;"><strong>1095.6</strong></td>
+<td style="text-align: right;">1095.6</td>
+<td style="text-align: right;">1095.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO12</td>
+<td style="text-align: left;"><strong>1095.0</strong></td>
+<td style="text-align: right;">1095</td>
+<td style="text-align: right;">1095</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO13</td>
+<td style="text-align: left;"><strong>1095.4</strong></td>
+<td style="text-align: right;">1095.4</td>
+<td style="text-align: right;">1095.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO14</td>
+<td style="text-align: left;"><strong>1094.8</strong></td>
+<td style="text-align: right;">1094.8</td>
+<td style="text-align: right;">1094.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO15</td>
+<td style="text-align: left;"><strong>1094.5</strong></td>
+<td style="text-align: right;">1094.5</td>
+<td style="text-align: right;">1094.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO16</td>
+<td style="text-align: left;"><strong>1094.3</strong></td>
+<td style="text-align: right;">1094.3</td>
+<td style="text-align: right;">1094.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC1</td>
+<td style="text-align: left;"><strong>1094.0</strong></td>
+<td style="text-align: right;">1094</td>
+<td style="text-align: right;">1094</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TC2</td>
+<td style="text-align: left;"><strong>1094.4</strong></td>
+<td style="text-align: right;">1094.4</td>
+<td style="text-align: right;">1094.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC3</td>
+<td style="text-align: left;"><strong>1094.2</strong></td>
+<td style="text-align: right;">1094.2</td>
+<td style="text-align: right;">1094.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TC4</td>
+<td style="text-align: left;"><strong>1094.7</strong></td>
+<td style="text-align: right;">1094.7</td>
+<td style="text-align: right;">1094.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC5</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM1</td>
+<td style="text-align: left;"><strong>1095.1</strong></td>
+<td style="text-align: right;">1095.1</td>
+<td style="text-align: right;">1095.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM2</td>
+<td style="text-align: left;"><strong>1094.3</strong></td>
+<td style="text-align: right;">1094.3</td>
+<td style="text-align: right;">1094.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM3</td>
+<td style="text-align: left;"><strong>1089.3</strong></td>
+<td style="text-align: right;">1089.3</td>
+<td style="text-align: right;">1089.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM4</td>
+<td style="text-align: left;"><strong>1096.7</strong></td>
+<td style="text-align: right;">1096.7</td>
+<td style="text-align: right;">1096.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM5</td>
+<td style="text-align: left;"><strong>1057.1</strong></td>
+<td style="text-align: right;">1057.1</td>
+<td style="text-align: right;">1057.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM6</td>
+<td style="text-align: left;"><strong>1096.0</strong></td>
+<td style="text-align: right;">1096</td>
+<td style="text-align: right;">1096</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO1</td>
+<td style="text-align: left;"><strong>1094.4</strong></td>
+<td style="text-align: right;">1094.4</td>
+<td style="text-align: right;">1094.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO2</td>
+<td style="text-align: left;"><strong>1094.7</strong></td>
+<td style="text-align: right;">1094.7</td>
+<td style="text-align: right;">1094.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO3</td>
+<td style="text-align: left;"><strong>1060.3</strong></td>
+<td style="text-align: right;">1060.3</td>
+<td style="text-align: right;">1060.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO4</td>
+<td style="text-align: left;"><strong>1070.2</strong></td>
+<td style="text-align: right;">1070.2</td>
+<td style="text-align: right;">1070.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO5</td>
+<td style="text-align: left;"><strong>1060.5</strong></td>
+<td style="text-align: right;">1060.5</td>
+<td style="text-align: right;">1060.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO6</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO7</td>
+<td style="text-align: left;"><strong>1077.1</strong></td>
+<td style="text-align: right;">1077.1</td>
+<td style="text-align: right;">1077.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO8</td>
+<td style="text-align: left;"><strong>1091.9</strong></td>
+<td style="text-align: right;">1091.9</td>
+<td style="text-align: right;">1091.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR1</td>
+<td style="text-align: left;"><strong>1094.5</strong></td>
+<td style="text-align: right;">1094.5</td>
+<td style="text-align: right;">1094.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR2</td>
+<td style="text-align: left;"><strong>1095.0</strong></td>
+<td style="text-align: right;">1095</td>
+<td style="text-align: right;">1095</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR3</td>
+<td style="text-align: left;"><strong>1094.7</strong></td>
+<td style="text-align: right;">1094.7</td>
+<td style="text-align: right;">1094.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR4</td>
+<td style="text-align: left;"><strong>1066.3</strong></td>
+<td style="text-align: right;">1066.3</td>
+<td style="text-align: right;">1066.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR5</td>
+<td style="text-align: left;"><strong>1095.0</strong></td>
+<td style="text-align: right;">1095</td>
+<td style="text-align: right;">1095</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR6</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TS1</td>
+<td style="text-align: left;"><strong>1094.8</strong></td>
+<td style="text-align: right;">1094.8</td>
+<td style="text-align: right;">1094.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TS2</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TS3</td>
+<td style="text-align: left;"><strong>1094.7</strong></td>
+<td style="text-align: right;">1094.7</td>
+<td style="text-align: right;">1094.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">[AVG]</td>
+<td style="text-align: left;"><strong>1091.8</strong></td>
+<td style="text-align: right;">1091.8</td>
+<td style="text-align: right;">1091.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">[MED]</td>
+<td style="text-align: left;"><strong>1094.6</strong></td>
+<td style="text-align: right;">1094.6</td>
+<td style="text-align: right;">1094.6</td>
+</tr>
+</tbody>
+</table>
+<p>Absolute trajectory error (ATE) [m]</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">7304d5da-1</th>
+<th style="text-align: left;">7304d5da-ba-1</th>
+<th style="text-align: left;">7304d5da-bapg-1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">EMH01</td>
+<td style="text-align: left;"><strong>0.063</strong></td>
+<td style="text-align: left;">0.074</td>
+<td style="text-align: left;">0.068</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EMH02</td>
+<td style="text-align: left;">0.060</td>
+<td style="text-align: left;">0.049</td>
+<td style="text-align: left;"><strong>0.045</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EMH03</td>
+<td style="text-align: left;">0.055</td>
+<td style="text-align: left;">0.055</td>
+<td style="text-align: left;"><strong>0.054</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EMH04</td>
+<td style="text-align: left;"><strong>0.075</strong></td>
+<td style="text-align: left;">0.135</td>
+<td style="text-align: left;">0.108</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EMH05</td>
+<td style="text-align: left;"><strong>0.078</strong></td>
+<td style="text-align: left;">0.094</td>
+<td style="text-align: left;">0.083</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV101</td>
+<td style="text-align: left;">0.046</td>
+<td style="text-align: left;"><strong>0.042</strong></td>
+<td style="text-align: left;">0.042</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV102</td>
+<td style="text-align: left;">0.089</td>
+<td style="text-align: left;">0.030</td>
+<td style="text-align: left;"><strong>0.029</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV103</td>
+<td style="text-align: left;">0.053</td>
+<td style="text-align: left;">0.124</td>
+<td style="text-align: left;"><strong>0.044</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV201</td>
+<td style="text-align: left;">0.036</td>
+<td style="text-align: left;">0.033</td>
+<td style="text-align: left;"><strong>0.032</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV202</td>
+<td style="text-align: left;">0.039</td>
+<td style="text-align: left;">0.074</td>
+<td style="text-align: left;"><strong>0.033</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV203</td>
+<td style="text-align: left;"><strong>0.075</strong></td>
+<td style="text-align: left;">0.104</td>
+<td style="text-align: left;">0.076</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO01</td>
+<td style="text-align: left;">0.137</td>
+<td style="text-align: left;">0.124</td>
+<td style="text-align: left;"><strong>0.116</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO02</td>
+<td style="text-align: left;">0.078</td>
+<td style="text-align: left;">0.069</td>
+<td style="text-align: left;"><strong>0.058</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO03</td>
+<td style="text-align: left;">0.040</td>
+<td style="text-align: left;">0.019</td>
+<td style="text-align: left;"><strong>0.018</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO04</td>
+<td style="text-align: left;">0.069</td>
+<td style="text-align: left;">0.059</td>
+<td style="text-align: left;"><strong>0.048</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO05</td>
+<td style="text-align: left;">0.030</td>
+<td style="text-align: left;">0.017</td>
+<td style="text-align: left;"><strong>0.016</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO06</td>
+<td style="text-align: left;">0.052</td>
+<td style="text-align: left;">0.040</td>
+<td style="text-align: left;"><strong>0.039</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO07</td>
+<td style="text-align: left;">0.021</td>
+<td style="text-align: left;"><strong>0.012</strong></td>
+<td style="text-align: left;">0.013</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO08</td>
+<td style="text-align: left;">0.028</td>
+<td style="text-align: left;">0.056</td>
+<td style="text-align: left;"><strong>0.022</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO09</td>
+<td style="text-align: left;"><strong>0.008</strong></td>
+<td style="text-align: left;">0.011</td>
+<td style="text-align: left;">0.011</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO10</td>
+<td style="text-align: left;"><strong>0.009</strong></td>
+<td style="text-align: left;">0.014</td>
+<td style="text-align: left;">0.014</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO11</td>
+<td style="text-align: left;">0.017</td>
+<td style="text-align: left;">0.010</td>
+<td style="text-align: left;"><strong>0.010</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO12</td>
+<td style="text-align: left;">0.052</td>
+<td style="text-align: left;">0.053</td>
+<td style="text-align: left;"><strong>0.047</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO13</td>
+<td style="text-align: left;">0.087</td>
+<td style="text-align: left;">0.082</td>
+<td style="text-align: left;"><strong>0.071</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO14</td>
+<td style="text-align: left;">0.037</td>
+<td style="text-align: left;">0.020</td>
+<td style="text-align: left;"><strong>0.020</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO15</td>
+<td style="text-align: left;">0.032</td>
+<td style="text-align: left;">0.021</td>
+<td style="text-align: left;"><strong>0.021</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO01</td>
+<td style="text-align: left;">0.265</td>
+<td style="text-align: left;">0.224</td>
+<td style="text-align: left;"><strong>0.185</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO02</td>
+<td style="text-align: left;">0.279</td>
+<td style="text-align: left;">0.240</td>
+<td style="text-align: left;"><strong>0.240</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO03</td>
+<td style="text-align: left;">0.050</td>
+<td style="text-align: left;">0.027</td>
+<td style="text-align: left;"><strong>0.024</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO04</td>
+<td style="text-align: left;">0.066</td>
+<td style="text-align: left;">0.071</td>
+<td style="text-align: left;"><strong>0.044</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO05</td>
+<td style="text-align: left;">0.038</td>
+<td style="text-align: left;">0.015</td>
+<td style="text-align: left;"><strong>0.013</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO06</td>
+<td style="text-align: left;">0.054</td>
+<td style="text-align: left;">0.029</td>
+<td style="text-align: left;"><strong>0.019</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO07</td>
+<td style="text-align: left;">0.036</td>
+<td style="text-align: left;">0.015</td>
+<td style="text-align: left;"><strong>0.015</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO08</td>
+<td style="text-align: left;"><strong>0.027</strong></td>
+<td style="text-align: left;">0.069</td>
+<td style="text-align: left;">0.030</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO09</td>
+<td style="text-align: left;">0.006</td>
+<td style="text-align: left;"><strong>0.002</strong></td>
+<td style="text-align: left;">0.002</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO10</td>
+<td style="text-align: left;">0.016</td>
+<td style="text-align: left;">0.018</td>
+<td style="text-align: left;"><strong>0.014</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO11</td>
+<td style="text-align: left;">0.025</td>
+<td style="text-align: left;">0.023</td>
+<td style="text-align: left;"><strong>0.023</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO12</td>
+<td style="text-align: left;">0.074</td>
+<td style="text-align: left;">0.067</td>
+<td style="text-align: left;"><strong>0.066</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO13</td>
+<td style="text-align: left;">0.252</td>
+<td style="text-align: left;"><strong>0.247</strong></td>
+<td style="text-align: left;">0.249</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO14</td>
+<td style="text-align: left;">0.046</td>
+<td style="text-align: left;">0.043</td>
+<td style="text-align: left;"><strong>0.025</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO15</td>
+<td style="text-align: left;">0.113</td>
+<td style="text-align: left;">0.097</td>
+<td style="text-align: left;"><strong>0.095</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO16</td>
+<td style="text-align: left;"><strong>0.130</strong></td>
+<td style="text-align: left;">0.168</td>
+<td style="text-align: left;">0.132</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB01</td>
+<td style="text-align: left;">0.031</td>
+<td style="text-align: left;">0.012</td>
+<td style="text-align: left;"><strong>0.012</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB02</td>
+<td style="text-align: left;">0.035</td>
+<td style="text-align: left;">0.023</td>
+<td style="text-align: left;"><strong>0.017</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB03</td>
+<td style="text-align: left;">0.044</td>
+<td style="text-align: left;">0.025</td>
+<td style="text-align: left;"><strong>0.025</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB04</td>
+<td style="text-align: left;">0.037</td>
+<td style="text-align: left;">0.042</td>
+<td style="text-align: left;"><strong>0.020</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB05</td>
+<td style="text-align: left;">0.031</td>
+<td style="text-align: left;">0.015</td>
+<td style="text-align: left;"><strong>0.014</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB06</td>
+<td style="text-align: left;">0.035</td>
+<td style="text-align: left;"><strong>0.016</strong></td>
+<td style="text-align: left;">0.018</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB07</td>
+<td style="text-align: left;">0.031</td>
+<td style="text-align: left;">0.017</td>
+<td style="text-align: left;"><strong>0.016</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB08</td>
+<td style="text-align: left;">0.042</td>
+<td style="text-align: left;">0.050</td>
+<td style="text-align: left;"><strong>0.032</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP01</td>
+<td style="text-align: left;">0.044</td>
+<td style="text-align: left;">0.033</td>
+<td style="text-align: left;"><strong>0.029</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP02</td>
+<td style="text-align: left;">0.040</td>
+<td style="text-align: left;">0.038</td>
+<td style="text-align: left;"><strong>0.033</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP03</td>
+<td style="text-align: left;">0.048</td>
+<td style="text-align: left;">0.030</td>
+<td style="text-align: left;"><strong>0.030</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP04</td>
+<td style="text-align: left;">0.039</td>
+<td style="text-align: left;">0.026</td>
+<td style="text-align: left;"><strong>0.025</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP05</td>
+<td style="text-align: left;">0.035</td>
+<td style="text-align: left;">0.028</td>
+<td style="text-align: left;"><strong>0.020</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP06</td>
+<td style="text-align: left;">0.042</td>
+<td style="text-align: left;">0.027</td>
+<td style="text-align: left;"><strong>0.025</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPT01</td>
+<td style="text-align: left;">0.033</td>
+<td style="text-align: left;"><strong>0.017</strong></td>
+<td style="text-align: left;">0.017</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPT02</td>
+<td style="text-align: left;">0.039</td>
+<td style="text-align: left;">0.024</td>
+<td style="text-align: left;"><strong>0.023</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPT03</td>
+<td style="text-align: left;">0.038</td>
+<td style="text-align: left;">0.024</td>
+<td style="text-align: left;"><strong>0.023</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO01</td>
+<td style="text-align: left;">0.048</td>
+<td style="text-align: left;">0.036</td>
+<td style="text-align: left;"><strong>0.028</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO02</td>
+<td style="text-align: left;">0.047</td>
+<td style="text-align: left;">0.049</td>
+<td style="text-align: left;"><strong>0.025</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO03</td>
+<td style="text-align: left;">0.045</td>
+<td style="text-align: left;">0.034</td>
+<td style="text-align: left;"><strong>0.027</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO04</td>
+<td style="text-align: left;">0.036</td>
+<td style="text-align: left;">0.033</td>
+<td style="text-align: left;"><strong>0.032</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO05</td>
+<td style="text-align: left;">0.028</td>
+<td style="text-align: left;"><strong>0.013</strong></td>
+<td style="text-align: left;">0.014</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO06</td>
+<td style="text-align: left;">0.035</td>
+<td style="text-align: left;">0.026</td>
+<td style="text-align: left;"><strong>0.016</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO07</td>
+<td style="text-align: left;">0.013</td>
+<td style="text-align: left;">0.012</td>
+<td style="text-align: left;"><strong>0.012</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO08</td>
+<td style="text-align: left;">0.029</td>
+<td style="text-align: left;"><strong>0.026</strong></td>
+<td style="text-align: left;">0.029</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO09</td>
+<td style="text-align: left;"><strong>0.004</strong></td>
+<td style="text-align: left;">0.005</td>
+<td style="text-align: left;">0.004</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO10</td>
+<td style="text-align: left;"><strong>0.010</strong></td>
+<td style="text-align: left;">0.014</td>
+<td style="text-align: left;">0.014</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO11</td>
+<td style="text-align: left;">0.019</td>
+<td style="text-align: left;"><strong>0.019</strong></td>
+<td style="text-align: left;">0.024</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO12</td>
+<td style="text-align: left;">0.072</td>
+<td style="text-align: left;">0.084</td>
+<td style="text-align: left;"><strong>0.065</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO13</td>
+<td style="text-align: left;">0.077</td>
+<td style="text-align: left;">0.083</td>
+<td style="text-align: left;"><strong>0.071</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO14</td>
+<td style="text-align: left;">0.058</td>
+<td style="text-align: left;">0.025</td>
+<td style="text-align: left;"><strong>0.021</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO15</td>
+<td style="text-align: left;">0.362</td>
+<td style="text-align: left;"><strong>0.336</strong></td>
+<td style="text-align: left;">0.337</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO16</td>
+<td style="text-align: left;">0.024</td>
+<td style="text-align: left;"><strong>0.020</strong></td>
+<td style="text-align: left;">0.022</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC1</td>
+<td style="text-align: left;">0.051</td>
+<td style="text-align: left;">0.047</td>
+<td style="text-align: left;"><strong>0.040</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TC2</td>
+<td style="text-align: left;">0.075</td>
+<td style="text-align: left;">0.061</td>
+<td style="text-align: left;"><strong>0.059</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC3</td>
+<td style="text-align: left;"><strong>0.045</strong></td>
+<td style="text-align: left;">0.067</td>
+<td style="text-align: left;">0.065</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TC4</td>
+<td style="text-align: left;">0.223</td>
+<td style="text-align: left;">0.213</td>
+<td style="text-align: left;"><strong>0.195</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC5</td>
+<td style="text-align: left;">0.111</td>
+<td style="text-align: left;">0.050</td>
+<td style="text-align: left;"><strong>0.020</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM1</td>
+<td style="text-align: left;">0.148</td>
+<td style="text-align: left;"><strong>0.124</strong></td>
+<td style="text-align: left;">0.125</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM2</td>
+<td style="text-align: left;">1.439</td>
+<td style="text-align: left;">1.182</td>
+<td style="text-align: left;"><strong>1.130</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM3</td>
+<td style="text-align: left;">1.942</td>
+<td style="text-align: left;">1.897</td>
+<td style="text-align: left;"><strong>1.875</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM4</td>
+<td style="text-align: left;"><strong>1.032</strong></td>
+<td style="text-align: left;">1.039</td>
+<td style="text-align: left;">1.046</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM5</td>
+<td style="text-align: left;">1.008</td>
+<td style="text-align: left;"><strong>0.970</strong></td>
+<td style="text-align: left;">0.970</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM6</td>
+<td style="text-align: left;"><strong>0.300</strong></td>
+<td style="text-align: left;">0.309</td>
+<td style="text-align: left;">0.309</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO1</td>
+<td style="text-align: left;"><strong>285.278</strong></td>
+<td style="text-align: left;">285.284</td>
+<td style="text-align: left;">285.279</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO2</td>
+<td style="text-align: left;"><strong>57.430</strong></td>
+<td style="text-align: left;">57.464</td>
+<td style="text-align: left;">57.472</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO3</td>
+<td style="text-align: left;">2.185</td>
+<td style="text-align: left;">1.296</td>
+<td style="text-align: left;"><strong>1.057</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO4</td>
+<td style="text-align: left;">12.149</td>
+<td style="text-align: left;"><strong>12.143</strong></td>
+<td style="text-align: left;">12.156</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO5</td>
+<td style="text-align: left;"><strong>5.930</strong></td>
+<td style="text-align: left;">5.961</td>
+<td style="text-align: left;">5.960</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO6</td>
+<td style="text-align: left;">70.602</td>
+<td style="text-align: left;"><strong>70.560</strong></td>
+<td style="text-align: left;">70.562</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO7</td>
+<td style="text-align: left;">1.812</td>
+<td style="text-align: left;">1.750</td>
+<td style="text-align: left;"><strong>1.718</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO8</td>
+<td style="text-align: left;">12.328</td>
+<td style="text-align: left;"><strong>12.314</strong></td>
+<td style="text-align: left;">12.324</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR1</td>
+<td style="text-align: left;">0.044</td>
+<td style="text-align: left;"><strong>0.007</strong></td>
+<td style="text-align: left;">0.007</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR2</td>
+<td style="text-align: left;">0.038</td>
+<td style="text-align: left;">0.008</td>
+<td style="text-align: left;"><strong>0.007</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR3</td>
+<td style="text-align: left;">0.041</td>
+<td style="text-align: left;">0.010</td>
+<td style="text-align: left;"><strong>0.010</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR4</td>
+<td style="text-align: left;">0.044</td>
+<td style="text-align: left;"><strong>0.011</strong></td>
+<td style="text-align: left;">0.011</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR5</td>
+<td style="text-align: left;">0.036</td>
+<td style="text-align: left;"><strong>0.009</strong></td>
+<td style="text-align: left;">0.009</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR6</td>
+<td style="text-align: left;">0.022</td>
+<td style="text-align: left;"><strong>0.009</strong></td>
+<td style="text-align: left;">0.009</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TS1</td>
+<td style="text-align: left;">0.030</td>
+<td style="text-align: left;">0.018</td>
+<td style="text-align: left;"><strong>0.017</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TS2</td>
+<td style="text-align: left;">1.168</td>
+<td style="text-align: left;"><strong>1.167</strong></td>
+<td style="text-align: left;">1.168</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TS3</td>
+<td style="text-align: left;">1.308</td>
+<td style="text-align: left;">1.309</td>
+<td style="text-align: left;"><strong>1.304</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">[AVG]</td>
+<td style="text-align: left;">4.478</td>
+<td style="text-align: left;">4.459</td>
+<td style="text-align: left;"><strong>4.450</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">[MED]</td>
+<td style="text-align: left;">0.046</td>
+<td style="text-align: left;">0.040</td>
+<td style="text-align: left;"><strong>0.029</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Relative trajectory error (RTE) [m]</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">7304d5da-1</th>
+<th style="text-align: left;">7304d5da-ba-1</th>
+<th style="text-align: left;">7304d5da-bapg-1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">EMH01</td>
+<td style="text-align: left;">0.005542</td>
+<td style="text-align: left;">0.005013</td>
+<td style="text-align: left;"><strong>0.004954</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EMH02</td>
+<td style="text-align: left;">0.005769</td>
+<td style="text-align: left;">0.004165</td>
+<td style="text-align: left;"><strong>0.004059</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EMH03</td>
+<td style="text-align: left;"><strong>0.012625</strong></td>
+<td style="text-align: left;">0.013406</td>
+<td style="text-align: left;">0.013177</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EMH04</td>
+<td style="text-align: left;">0.013094</td>
+<td style="text-align: left;">0.013636</td>
+<td style="text-align: left;"><strong>0.012960</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EMH05</td>
+<td style="text-align: left;">0.011642</td>
+<td style="text-align: left;">0.010799</td>
+<td style="text-align: left;"><strong>0.010285</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV101</td>
+<td style="text-align: left;">0.013178</td>
+<td style="text-align: left;">0.013052</td>
+<td style="text-align: left;"><strong>0.013048</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV102</td>
+<td style="text-align: left;">0.013906</td>
+<td style="text-align: left;">0.011808</td>
+<td style="text-align: left;"><strong>0.011638</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV103</td>
+<td style="text-align: left;"><strong>0.013661</strong></td>
+<td style="text-align: left;">0.038899</td>
+<td style="text-align: left;">0.015127</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV201</td>
+<td style="text-align: left;">0.003686</td>
+<td style="text-align: left;"><strong>0.003383</strong></td>
+<td style="text-align: left;">0.003402</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EV202</td>
+<td style="text-align: left;">0.008600</td>
+<td style="text-align: left;">0.025916</td>
+<td style="text-align: left;"><strong>0.008191</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EV203</td>
+<td style="text-align: left;">0.034981</td>
+<td style="text-align: left;">0.053507</td>
+<td style="text-align: left;"><strong>0.027943</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO01</td>
+<td style="text-align: left;">0.024822</td>
+<td style="text-align: left;">0.025244</td>
+<td style="text-align: left;"><strong>0.023398</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO02</td>
+<td style="text-align: left;">0.029319</td>
+<td style="text-align: left;">0.030875</td>
+<td style="text-align: left;"><strong>0.025023</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO03</td>
+<td style="text-align: left;">0.014547</td>
+<td style="text-align: left;">0.010470</td>
+<td style="text-align: left;"><strong>0.009966</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO04</td>
+<td style="text-align: left;">0.026901</td>
+<td style="text-align: left;">0.028155</td>
+<td style="text-align: left;"><strong>0.020938</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO05</td>
+<td style="text-align: left;">0.004553</td>
+<td style="text-align: left;">0.003383</td>
+<td style="text-align: left;"><strong>0.003382</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO06</td>
+<td style="text-align: left;">0.020421</td>
+<td style="text-align: left;">0.015482</td>
+<td style="text-align: left;"><strong>0.014435</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO07</td>
+<td style="text-align: left;">0.006042</td>
+<td style="text-align: left;"><strong>0.004371</strong></td>
+<td style="text-align: left;">0.004397</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO08</td>
+<td style="text-align: left;">0.013678</td>
+<td style="text-align: left;">0.042620</td>
+<td style="text-align: left;"><strong>0.011999</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO09</td>
+<td style="text-align: left;"><strong>0.006509</strong></td>
+<td style="text-align: left;">0.006786</td>
+<td style="text-align: left;">0.006766</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO10</td>
+<td style="text-align: left;">0.003946</td>
+<td style="text-align: left;"><strong>0.002855</strong></td>
+<td style="text-align: left;">0.002865</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO11</td>
+<td style="text-align: left;">0.006449</td>
+<td style="text-align: left;">0.004413</td>
+<td style="text-align: left;"><strong>0.004404</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO12</td>
+<td style="text-align: left;">0.017504</td>
+<td style="text-align: left;">0.017583</td>
+<td style="text-align: left;"><strong>0.017217</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO13</td>
+<td style="text-align: left;">0.027578</td>
+<td style="text-align: left;">0.039642</td>
+<td style="text-align: left;"><strong>0.023974</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MGO14</td>
+<td style="text-align: left;">0.013779</td>
+<td style="text-align: left;">0.009221</td>
+<td style="text-align: left;"><strong>0.009047</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MGO15</td>
+<td style="text-align: left;">0.003799</td>
+<td style="text-align: left;"><strong>0.003011</strong></td>
+<td style="text-align: left;">0.003323</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO01</td>
+<td style="text-align: left;">0.039236</td>
+<td style="text-align: left;">0.043567</td>
+<td style="text-align: left;"><strong>0.036476</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO02</td>
+<td style="text-align: left;">0.057894</td>
+<td style="text-align: left;">0.045550</td>
+<td style="text-align: left;"><strong>0.042785</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO03</td>
+<td style="text-align: left;"><strong>0.007376</strong></td>
+<td style="text-align: left;">0.009796</td>
+<td style="text-align: left;">0.008530</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO04</td>
+<td style="text-align: left;"><strong>0.014418</strong></td>
+<td style="text-align: left;">0.037755</td>
+<td style="text-align: left;">0.015266</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO05</td>
+<td style="text-align: left;">0.004471</td>
+<td style="text-align: left;">0.003014</td>
+<td style="text-align: left;"><strong>0.002660</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO06</td>
+<td style="text-align: left;">0.012569</td>
+<td style="text-align: left;">0.015193</td>
+<td style="text-align: left;"><strong>0.007695</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO07</td>
+<td style="text-align: left;">0.004177</td>
+<td style="text-align: left;">0.002598</td>
+<td style="text-align: left;"><strong>0.002445</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO08</td>
+<td style="text-align: left;"><strong>0.007935</strong></td>
+<td style="text-align: left;">0.040587</td>
+<td style="text-align: left;">0.008205</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO09</td>
+<td style="text-align: left;">0.002933</td>
+<td style="text-align: left;"><strong>0.001948</strong></td>
+<td style="text-align: left;">0.001968</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO10</td>
+<td style="text-align: left;">0.005193</td>
+<td style="text-align: left;">0.006285</td>
+<td style="text-align: left;"><strong>0.004964</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO11</td>
+<td style="text-align: left;">0.007495</td>
+<td style="text-align: left;">0.006440</td>
+<td style="text-align: left;"><strong>0.006207</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO12</td>
+<td style="text-align: left;">0.006704</td>
+<td style="text-align: left;">0.006135</td>
+<td style="text-align: left;"><strong>0.005756</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO13</td>
+<td style="text-align: left;">0.028153</td>
+<td style="text-align: left;">0.026846</td>
+<td style="text-align: left;"><strong>0.026576</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO14</td>
+<td style="text-align: left;">0.003290</td>
+<td style="text-align: left;">0.003539</td>
+<td style="text-align: left;"><strong>0.003063</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIO15</td>
+<td style="text-align: left;"><strong>0.012601</strong></td>
+<td style="text-align: left;">0.014385</td>
+<td style="text-align: left;">0.014589</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIO16</td>
+<td style="text-align: left;"><strong>0.013524</strong></td>
+<td style="text-align: left;">0.022378</td>
+<td style="text-align: left;">0.015005</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB01</td>
+<td style="text-align: left;">0.009834</td>
+<td style="text-align: left;">0.007232</td>
+<td style="text-align: left;"><strong>0.005687</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB02</td>
+<td style="text-align: left;">0.007116</td>
+<td style="text-align: left;">0.021778</td>
+<td style="text-align: left;"><strong>0.004597</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB03</td>
+<td style="text-align: left;">0.007296</td>
+<td style="text-align: left;">0.007123</td>
+<td style="text-align: left;"><strong>0.005473</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB04</td>
+<td style="text-align: left;">0.005577</td>
+<td style="text-align: left;">0.008953</td>
+<td style="text-align: left;"><strong>0.004895</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB05</td>
+<td style="text-align: left;">0.006458</td>
+<td style="text-align: left;">0.005376</td>
+<td style="text-align: left;"><strong>0.004292</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB06</td>
+<td style="text-align: left;">0.005002</td>
+<td style="text-align: left;">0.005078</td>
+<td style="text-align: left;"><strong>0.003895</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPB07</td>
+<td style="text-align: left;">0.006111</td>
+<td style="text-align: left;">0.005366</td>
+<td style="text-align: left;"><strong>0.004503</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPB08</td>
+<td style="text-align: left;">0.004374</td>
+<td style="text-align: left;">0.004703</td>
+<td style="text-align: left;"><strong>0.004105</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP01</td>
+<td style="text-align: left;">0.012753</td>
+<td style="text-align: left;">0.013907</td>
+<td style="text-align: left;"><strong>0.011395</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP02</td>
+<td style="text-align: left;"><strong>0.011849</strong></td>
+<td style="text-align: left;">0.017009</td>
+<td style="text-align: left;">0.014043</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP03</td>
+<td style="text-align: left;"><strong>0.010996</strong></td>
+<td style="text-align: left;">0.012809</td>
+<td style="text-align: left;">0.011543</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP04</td>
+<td style="text-align: left;"><strong>0.009195</strong></td>
+<td style="text-align: left;">0.011693</td>
+<td style="text-align: left;">0.009523</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPP05</td>
+<td style="text-align: left;"><strong>0.007755</strong></td>
+<td style="text-align: left;">0.019971</td>
+<td style="text-align: left;">0.011700</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPP06</td>
+<td style="text-align: left;"><strong>0.010644</strong></td>
+<td style="text-align: left;">0.012123</td>
+<td style="text-align: left;">0.010763</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPT01</td>
+<td style="text-align: left;">0.005660</td>
+<td style="text-align: left;">0.004594</td>
+<td style="text-align: left;"><strong>0.004151</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MIPT02</td>
+<td style="text-align: left;">0.005536</td>
+<td style="text-align: left;">0.004619</td>
+<td style="text-align: left;"><strong>0.004168</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MIPT03</td>
+<td style="text-align: left;">0.007122</td>
+<td style="text-align: left;">0.005493</td>
+<td style="text-align: left;"><strong>0.005308</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO01</td>
+<td style="text-align: left;">0.017821</td>
+<td style="text-align: left;">0.016270</td>
+<td style="text-align: left;"><strong>0.013180</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO02</td>
+<td style="text-align: left;">0.016799</td>
+<td style="text-align: left;">0.028853</td>
+<td style="text-align: left;"><strong>0.014824</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO03</td>
+<td style="text-align: left;">0.014761</td>
+<td style="text-align: left;">0.012481</td>
+<td style="text-align: left;"><strong>0.011285</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO04</td>
+<td style="text-align: left;"><strong>0.010752</strong></td>
+<td style="text-align: left;">0.013174</td>
+<td style="text-align: left;">0.012133</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO05</td>
+<td style="text-align: left;">0.003372</td>
+<td style="text-align: left;">0.002944</td>
+<td style="text-align: left;"><strong>0.002832</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO06</td>
+<td style="text-align: left;">0.008913</td>
+<td style="text-align: left;">0.010491</td>
+<td style="text-align: left;"><strong>0.007837</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO07</td>
+<td style="text-align: left;">0.003622</td>
+<td style="text-align: left;">0.003111</td>
+<td style="text-align: left;"><strong>0.003069</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO08</td>
+<td style="text-align: left;">0.013930</td>
+<td style="text-align: left;"><strong>0.012082</strong></td>
+<td style="text-align: left;">0.012776</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO09</td>
+<td style="text-align: left;">0.003288</td>
+<td style="text-align: left;">0.003174</td>
+<td style="text-align: left;"><strong>0.003006</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO10</td>
+<td style="text-align: left;">0.004047</td>
+<td style="text-align: left;">0.003747</td>
+<td style="text-align: left;"><strong>0.003691</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO11</td>
+<td style="text-align: left;">0.005394</td>
+<td style="text-align: left;">0.004865</td>
+<td style="text-align: left;"><strong>0.004478</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO12</td>
+<td style="text-align: left;">0.008186</td>
+<td style="text-align: left;">0.009837</td>
+<td style="text-align: left;"><strong>0.008104</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO13</td>
+<td style="text-align: left;">0.017401</td>
+<td style="text-align: left;">0.038728</td>
+<td style="text-align: left;"><strong>0.017259</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO14</td>
+<td style="text-align: left;">0.008640</td>
+<td style="text-align: left;">0.012417</td>
+<td style="text-align: left;"><strong>0.007590</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOO15</td>
+<td style="text-align: left;"><strong>0.018403</strong></td>
+<td style="text-align: left;">0.019444</td>
+<td style="text-align: left;">0.020227</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOO16</td>
+<td style="text-align: left;">0.001681</td>
+<td style="text-align: left;"><strong>0.001407</strong></td>
+<td style="text-align: left;">0.001897</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC1</td>
+<td style="text-align: left;">0.012092</td>
+<td style="text-align: left;">0.007648</td>
+<td style="text-align: left;"><strong>0.007036</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TC2</td>
+<td style="text-align: left;">0.013911</td>
+<td style="text-align: left;">0.011985</td>
+<td style="text-align: left;"><strong>0.011855</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC3</td>
+<td style="text-align: left;"><strong>0.009566</strong></td>
+<td style="text-align: left;">0.010607</td>
+<td style="text-align: left;">0.010358</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TC4</td>
+<td style="text-align: left;">0.037158</td>
+<td style="text-align: left;">0.033667</td>
+<td style="text-align: left;"><strong>0.029880</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TC5</td>
+<td style="text-align: left;">0.030848</td>
+<td style="text-align: left;">0.010497</td>
+<td style="text-align: left;"><strong>0.005276</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM1</td>
+<td style="text-align: left;">0.018899</td>
+<td style="text-align: left;"><strong>0.016258</strong></td>
+<td style="text-align: left;">0.016466</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM2</td>
+<td style="text-align: left;">0.167821</td>
+<td style="text-align: left;">0.135235</td>
+<td style="text-align: left;"><strong>0.130386</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM3</td>
+<td style="text-align: left;">0.231946</td>
+<td style="text-align: left;">0.226471</td>
+<td style="text-align: left;"><strong>0.222956</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM4</td>
+<td style="text-align: left;">0.099564</td>
+<td style="text-align: left;"><strong>0.095235</strong></td>
+<td style="text-align: left;">0.096152</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TM5</td>
+<td style="text-align: left;">0.114758</td>
+<td style="text-align: left;"><strong>0.106127</strong></td>
+<td style="text-align: left;">0.106428</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TM6</td>
+<td style="text-align: left;"><strong>0.049502</strong></td>
+<td style="text-align: left;">0.054688</td>
+<td style="text-align: left;">0.051306</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO1</td>
+<td style="text-align: left;"><strong>29.285938</strong></td>
+<td style="text-align: left;">29.287838</td>
+<td style="text-align: left;">29.286504</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO2</td>
+<td style="text-align: left;">6.151703</td>
+<td style="text-align: left;"><strong>6.151392</strong></td>
+<td style="text-align: left;">6.152783</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO3</td>
+<td style="text-align: left;">0.499913</td>
+<td style="text-align: left;">0.151987</td>
+<td style="text-align: left;"><strong>0.143342</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO4</td>
+<td style="text-align: left;">1.212580</td>
+<td style="text-align: left;"><strong>1.212468</strong></td>
+<td style="text-align: left;">1.214096</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO5</td>
+<td style="text-align: left;">0.591983</td>
+<td style="text-align: left;"><strong>0.582922</strong></td>
+<td style="text-align: left;">0.582953</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO6</td>
+<td style="text-align: left;">7.371389</td>
+<td style="text-align: left;"><strong>7.359794</strong></td>
+<td style="text-align: left;">7.359800</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TO7</td>
+<td style="text-align: left;">0.287494</td>
+<td style="text-align: left;">0.274362</td>
+<td style="text-align: left;"><strong>0.268885</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TO8</td>
+<td style="text-align: left;">1.364948</td>
+<td style="text-align: left;"><strong>1.363237</strong></td>
+<td style="text-align: left;">1.365271</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR1</td>
+<td style="text-align: left;">0.008993</td>
+<td style="text-align: left;"><strong>0.004570</strong></td>
+<td style="text-align: left;">0.004586</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR2</td>
+<td style="text-align: left;">0.009308</td>
+<td style="text-align: left;">0.005847</td>
+<td style="text-align: left;"><strong>0.005843</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR3</td>
+<td style="text-align: left;">0.008036</td>
+<td style="text-align: left;"><strong>0.005177</strong></td>
+<td style="text-align: left;">0.005203</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR4</td>
+<td style="text-align: left;">0.006737</td>
+<td style="text-align: left;"><strong>0.003825</strong></td>
+<td style="text-align: left;">0.003897</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TR5</td>
+<td style="text-align: left;">0.010903</td>
+<td style="text-align: left;"><strong>0.004769</strong></td>
+<td style="text-align: left;">0.004782</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TR6</td>
+<td style="text-align: left;">0.004119</td>
+<td style="text-align: left;"><strong>0.002623</strong></td>
+<td style="text-align: left;">0.002650</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TS1</td>
+<td style="text-align: left;">0.007827</td>
+<td style="text-align: left;"><strong>0.004852</strong></td>
+<td style="text-align: left;">0.004865</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TS2</td>
+<td style="text-align: left;"><strong>0.141387</strong></td>
+<td style="text-align: left;">0.142952</td>
+<td style="text-align: left;">0.143230</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TS3</td>
+<td style="text-align: left;">0.145243</td>
+<td style="text-align: left;"><strong>0.144311</strong></td>
+<td style="text-align: left;">0.144335</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">[AVG]</td>
+<td style="text-align: left;">0.473489</td>
+<td style="text-align: left;">0.470834</td>
+<td style="text-align: left;"><strong>0.467509</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">[MED]</td>
+<td style="text-align: left;">0.010996</td>
+<td style="text-align: left;">0.012082</td>
+<td style="text-align: left;"><strong>0.009966</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Saved results to batch.json</p>
+<h1 id="timing-results">Timing Results</h1>
+<ul>
+<li>Project: <a href="https://gitlab.freedesktop.org/mateosss/basalt"
+class="uri">https://gitlab.freedesktop.org/mateosss/basalt</a></li>
+<li>Deterministic: 1</li>
+<li>Num threads: 0</li>
+<li>Repetitions: 1</li>
+<li>Evaluation sets: MOO11</li>
+<li>Branch: tsantucci/loop-closure</li>
+<li>Commit: 7304d5da</li>
+<li>Commit URL: <a
+href="https://gitlab.freedesktop.org/mateosss/basalt/-/commit/7304d5dab1f6be79845fed278bc33d47cd4a1ae5"
+class="uri">https://gitlab.freedesktop.org/mateosss/basalt/-/commit/7304d5dab1f6be79845fed278bc33d47cd4a1ae5</a></li>
+<li>Pipeline: 1739574</li>
+<li>Pipeline URL: <a
+href="https://gitlab.freedesktop.org/mateosss/basalt/-/pipelines/1739574"
+class="uri">https://gitlab.freedesktop.org/mateosss/basalt/-/pipelines/1739574</a></li>
+<li>Job: 109413873</li>
+<li>Job URL: <a
+href="https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/109413873"
+class="uri">https://gitlab.freedesktop.org/mateosss/basalt/-/jobs/109413873</a></li>
+<li>CPU: 13th Gen Intel(R) Core(TM) i5-13600</li>
+<li>RAM: 33GB</li>
+</ul>
+<h2 id="tables-1">Tables</h2>
+<p>Evaluating metrics: atec, rtec, timing, memory</p>
+<p>Average (± stdev) pose estimation time [ms]</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">7304d5da-1</th>
+<th style="text-align: left;">7304d5da-ba-1</th>
+<th style="text-align: left;">7304d5da-bapg-1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">MOO11</td>
+<td style="text-align: left;"><strong>4.99 ± 0.61</strong></td>
+<td style="text-align: left;">4.99 ± 0.61</td>
+<td style="text-align: left;">4.99 ± 0.61</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">[AVG]</td>
+<td style="text-align: left;"><strong>4.99 ± 0.61</strong></td>
+<td style="text-align: left;">4.99 ± 0.61</td>
+<td style="text-align: left;">4.99 ± 0.61</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">[MED]</td>
+<td style="text-align: left;"><strong>4.99 ± 0.61</strong></td>
+<td style="text-align: left;">4.99 ± 0.61</td>
+<td style="text-align: left;">4.99 ± 0.61</td>
+</tr>
+</tbody>
+</table>
+<p>Peak memory usage [MB]</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">7304d5da-1</th>
+<th style="text-align: right;">7304d5da-ba-1</th>
+<th style="text-align: right;">7304d5da-bapg-1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">MOO11</td>
+<td style="text-align: left;"><strong>1093.5</strong></td>
+<td style="text-align: right;">1093.5</td>
+<td style="text-align: right;">1093.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">[AVG]</td>
+<td style="text-align: left;"><strong>1093.5</strong></td>
+<td style="text-align: right;">1093.5</td>
+<td style="text-align: right;">1093.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">[MED]</td>
+<td style="text-align: left;"><strong>1093.5</strong></td>
+<td style="text-align: right;">1093.5</td>
+<td style="text-align: right;">1093.5</td>
+</tr>
+</tbody>
+</table>
+<p>Absolute trajectory error (ATE) [m]</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">7304d5da-1</th>
+<th style="text-align: left;">7304d5da-ba-1</th>
+<th style="text-align: right;">7304d5da-bapg-1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">MOO11</td>
+<td style="text-align: right;">0.019</td>
+<td style="text-align: left;"><strong>0.019</strong></td>
+<td style="text-align: right;">0.024</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">[AVG]</td>
+<td style="text-align: right;">0.019</td>
+<td style="text-align: left;"><strong>0.019</strong></td>
+<td style="text-align: right;">0.024</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">[MED]</td>
+<td style="text-align: right;">0.019</td>
+<td style="text-align: left;"><strong>0.019</strong></td>
+<td style="text-align: right;">0.024</td>
+</tr>
+</tbody>
+</table>
+<p>Relative trajectory error (RTE) [m]</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">7304d5da-1</th>
+<th style="text-align: right;">7304d5da-ba-1</th>
+<th style="text-align: left;">7304d5da-bapg-1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">MOO11</td>
+<td style="text-align: right;">0.005394</td>
+<td style="text-align: right;">0.004865</td>
+<td style="text-align: left;"><strong>0.004478</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">[AVG]</td>
+<td style="text-align: right;">0.005394</td>
+<td style="text-align: right;">0.004865</td>
+<td style="text-align: left;"><strong>0.004478</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">[MED]</td>
+<td style="text-align: right;">0.005394</td>
+<td style="text-align: right;">0.004865</td>
+<td style="text-align: left;"><strong>0.004478</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Saved results to timing-batch.json</p>
+<h2 id="stats">Stats</h2>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>[timing<span class="op">-</span>results<span class="op">/</span><span class="dv">7304</span><span class="er">d5da</span><span class="op">-</span><span class="dv">1</span><span class="op">/</span>MOO11<span class="op">/</span>timing.csv]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>TimingStats(mean<span class="op">=</span><span class="fl">4.870852417283951</span>, std<span class="op">=</span><span class="fl">0.7359089025276082</span>, <span class="bu">min</span><span class="op">=</span><span class="fl">3.460463</span>, q1<span class="op">=</span><span class="fl">4.293275</span>, q2<span class="op">=</span><span class="fl">4.811116</span>, q3<span class="op">=</span><span class="fl">5.361236</span>, <span class="bu">max</span><span class="op">=</span><span class="fl">7.92037</span>) <span class="im">from</span> <span class="st">&#39;frontend_frames_received&#39;</span> to <span class="st">&#39;backend_state_pushed&#39;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>[timing<span class="op">-</span>results<span class="op">/</span><span class="dv">7304</span><span class="er">d5da</span><span class="op">-</span>ba<span class="op">-</span><span class="dv">1</span><span class="op">/</span>MOO11<span class="op">/</span>timing.csv]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>TimingStats(mean<span class="op">=</span><span class="fl">4.870852417283951</span>, std<span class="op">=</span><span class="fl">0.7359089025276082</span>, <span class="bu">min</span><span class="op">=</span><span class="fl">3.460463</span>, q1<span class="op">=</span><span class="fl">4.293275</span>, q2<span class="op">=</span><span class="fl">4.811116</span>, q3<span class="op">=</span><span class="fl">5.361236</span>, <span class="bu">max</span><span class="op">=</span><span class="fl">7.92037</span>) <span class="im">from</span> <span class="st">&#39;frontend_frames_received&#39;</span> to <span class="st">&#39;backend_state_pushed&#39;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>[timing<span class="op">-</span>results<span class="op">/</span><span class="dv">7304</span><span class="er">d5da</span><span class="op">-</span>bapg<span class="op">-</span><span class="dv">1</span><span class="op">/</span>MOO11<span class="op">/</span>timing.csv]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>TimingStats(mean<span class="op">=</span><span class="fl">4.870852417283951</span>, std<span class="op">=</span><span class="fl">0.7359089025276082</span>, <span class="bu">min</span><span class="op">=</span><span class="fl">3.460463</span>, q1<span class="op">=</span><span class="fl">4.293275</span>, q2<span class="op">=</span><span class="fl">4.811116</span>, q3<span class="op">=</span><span class="fl">5.361236</span>, <span class="bu">max</span><span class="op">=</span><span class="fl">7.92037</span>) <span class="im">from</span> <span class="st">&#39;frontend_frames_received&#39;</span> to <span class="st">&#39;backend_state_pushed&#39;</span></span></code></pre></div>
+<h2 id="plots">Plots</h2>
+<ul>
+<li>Timing plot for timing-results/7304d5da-1/MOO11/timing.csv: <img
+src="timing-results/7304d5da-1/MOO11/timing.png"
+alt="Timing plot" /></li>
+<li>Timing plot for timing-results/7304d5da-ba-1/MOO11/timing.csv: <img
+src="timing-results/7304d5da-ba-1/MOO11/timing.png"
+alt="Timing plot" /></li>
+<li>Timing plot for timing-results/7304d5da-bapg-1/MOO11/timing.csv:
+<img src="timing-results/7304d5da-bapg-1/MOO11/timing.png"
+alt="Timing plot" /></li>
+</ul>
+</body>
+</html>
